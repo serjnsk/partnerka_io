@@ -6,4 +6,4 @@
 - UI-референс: synthesia.io. Целевое разрешение 1920×1080, адаптив до 375px.
 - Формы в модалке не отправляют данные, логотипы брендов и цифры в мокапах — заглушки.
 
-Открыть: https://serjnsk.github.io/partnerka-landing/
+Открыть: https://serjnsk.github.io/partnerka_io/
