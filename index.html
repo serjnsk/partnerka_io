@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Партнёрка — партнёрская программа для вашего продукта за 10 минут</title>
+<meta name="description" content="Партнёрка — сервис для быстрого запуска партнёрской, реферальной или амбассадорской программы. Интеграция за 10 минут, аналитика уровня больших сетей, антифрод, выплаты и 152-ФЗ.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        ink: '#090B22',
+        navy: '#0D0F2C',
+        body: '#363636',
+        muted: '#68686A',
+        line: '#E6E7EC',
+        soft: '#F6F6F8',
+        brand: '#4B5BEA',
+        brandlight: '#EEF0FF',
+      },
+      fontFamily: {
+        sans: ['Onest', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+      },
+      borderRadius: { xl2: '1.25rem', xl3: '1.75rem' },
+      boxShadow: {
+        card: '0 1px 2px rgba(9,11,34,.04), 0 0.75rem 2.5rem -0.75rem rgba(9,11,34,.12)',
+        mock: '0 1.25rem 3.75rem -1.25rem rgba(9,11,34,.35)',
+      },
+    }
+  }
+}
+</script>
+<style>
+  html { scroll-behavior: smooth; font-size: clamp(16px, 1.1111vw, 19.2px); }
+  body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  /* ---- Typography (по референсу synthesia.io, базовая сетка 1rem; на 120rem корневой размер растёт до 1.2rem) ---- */
+  .h-display { font-size: 4.5rem; line-height: 1; font-weight: 500; letter-spacing: -0.055em; text-wrap: balance; }
+  .h-section { font-size: 2.75rem; line-height: 1.05; font-weight: 500; letter-spacing: -0.045em; text-wrap: balance; }
+  .h-section.h-sm { font-size: 2.5rem; }
+  .h-section.h-xl { font-size: 3.5rem; line-height: 1; letter-spacing: -0.05em; }
+  .h-card { font-size: 1.625rem; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; text-wrap: balance; }
+  .h-card.h-card-sm { font-size: 1.25rem; line-height: 1.1; letter-spacing: -0.03em; }
+  .logo-word, .modal-brand { font-weight: 600; letter-spacing: -0.03em; }
+  @media (max-width: 639px) {
+    .h-display { font-size: 2.5rem; line-height: 1.02; letter-spacing: -0.045em; }
+    .h-section, .h-section.h-md, .h-section.h-sm { font-size: 2rem; }
+    .h-section.h-xl { font-size: 2.25rem; }
+    .h-card { font-size: 1.375rem; }
+  }
+  .eyebrow { font-size: 0.8125rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+  .eyebrow::before { content: ''; display: inline-block; width: 0.375rem; height: 0.375rem; border-radius: 62.4375rem; background: currentColor; margin-right: 0.5rem; vertical-align: 2px; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.625rem; padding: 0.75rem 1.125rem; font-weight: 500; font-size: 1rem; line-height: 1; transition: transform .15s ease, background .15s ease, box-shadow .15s ease; white-space: nowrap; }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: #090B22; color: #fff; }
+  .btn-primary:hover { background: #1C1F45; }
+  .btn-ghost { color: #090B22; }
+  .btn-ghost:hover { background: #F0F0F3; }
+  .btn-outline { border: 1px solid #D7D8E0; color: #090B22; background: #fff; }
+  .btn-outline:hover { background: #F6F6F8; }
+  .btn-white { background: #fff; color: #090B22; }
+  .btn-white:hover { background: #ECEEFF; }
+  .btn-outline-white { border: 1px solid rgba(255,255,255,.45); color: #fff; }
+  .btn-outline-white:hover { background: rgba(255,255,255,.1); }
+  .arrow { transition: transform .15s ease; }
+  .btn:hover .arrow, a:hover > .arrow { transform: translateX(0.1875rem); }
+  .card { background: #F6F6F8; border-radius: 1.75rem; }
+  .visual { border-radius: 1.25rem; overflow: hidden; position: relative; min-width: 0; }
+  .visual table { table-layout: auto; }
+  .mock-window { min-width: 0; }
+  .side-link { position: relative; display: flex; align-items: center; gap: 0.75rem; color: #A3A5B3; font-size: 1.25rem; letter-spacing: -0.02em; font-weight: 500; padding: 0.375rem 0; transition: color .2s; cursor: pointer; }
+  .side-link .side-arrow { width: 1.375rem; opacity: 0; transform: translateX(-0.375rem); transition: all .2s; }
+  .side-link.active { color: #090B22; }
+  .side-link.active .side-arrow { opacity: 1; transform: translateX(0); }
+  .side-link:hover { color: #090B22; }
+  .feature-group { scroll-margin-top: 7rem; }
+  /* marquee */
+  .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .marquee-track { display: flex; gap: 4.5rem; width: max-content; animation: marquee 38s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .logo { font-weight: 700; font-size: 1.625rem; letter-spacing: -0.03em; color: #0D0F2C; white-space: nowrap; opacity: .85; display: flex; align-items: center; gap: 0.5rem; }
+  /* faq */
+  .faq-item { border-bottom: 1px solid #E6E7EC; }
+  .faq-q { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; text-align: left; padding: 1.375rem 0; font-size: 1.125rem; font-weight: 500; letter-spacing: -0.015em; color: #090B22; }
+  .faq-q svg { flex: none; transition: transform .25s ease; }
+  .faq-item[open] .faq-q svg { transform: rotate(90deg); }
+  .faq-a { color: #4A4D5E; padding-bottom: 1.5rem; max-width: 45rem; line-height: 1.6; }
+  details > summary { list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  /* mock parts */
+  .mock-window { background: #fff; border: 1px solid #E6E7EC; border-radius: 0.875rem; box-shadow: 0 1px 2px rgba(9,11,34,.05), 0 1.25rem 3.125rem -1.5625rem rgba(9,11,34,.25); }
+  .pill { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 62.4375rem; font-size: 0.75rem; font-weight: 500; }
+  .bar { border-radius: 0.25rem 0.25rem 0 0; background: #4B5BEA; }
+  .chip { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 0.625rem; background: #fff; border: 1px solid #E6E7EC; font-size: 0.8125rem; font-weight: 500; color: #090B22; }
+  .tab { padding: 0.5rem 0.875rem; border-radius: 62.4375rem; font-size: 0.875rem; font-weight: 500; color: #6B6E80; }
+  .tab.on { background: #090B22; color: #fff; }
+  .cta-gradient { background: radial-gradient(120% 90% at 50% 0%, #0D0F2C 0%, #1F2A7A 45%, #6E86FF 100%); }
+  .fade-up { opacity: 0; transform: translateY(0.875rem); transition: opacity .6s ease, transform .6s ease; }
+  .fade-up.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } .fade-up { opacity: 1; transform: none; transition: none; } }
+  .modal-backdrop { background: rgba(9,11,34,.55); backdrop-filter: blur(0.25rem); }
+  .input { width: 100%; border: 1px solid #D7D8E0; border-radius: 0.625rem; padding: 0.75rem 0.875rem; font-size: 0.9375rem; outline: none; transition: border .15s, box-shadow .15s; }
+  .input:focus { border-color: #4B5BEA; box-shadow: 0 0 0 0.1875rem rgba(75,91,234,.15); }
+  .nav-link { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.5rem 0.625rem; border-radius: 0.5rem; font-size: 1rem; color: #68686A; white-space: nowrap; }
+  .nav-link:hover { background: #F0F0F3; color: #090B22; }
+</style>
+</head>
+<body class="font-sans text-body bg-white">
+
+<!-- ============ HEADER ============ -->
+<header id="header" class="sticky top-0 z-40 bg-white/85 backdrop-blur border-b border-transparent transition-colors">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+    <div class="flex h-[4.5rem] items-center justify-between gap-4">
+      <a href="#" class="flex items-center gap-2 shrink-0" aria-label="Партнёрка — на главную">
+        <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-white">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="3" cy="8" r="2" fill="#fff"/></svg>
+        </span>
+        <span class="logo-word text-[1.375rem] text-ink">Партнёрка</span>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1" aria-label="Основное меню">
+        <a href="#features" class="nav-link">Платформа <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="#solutions" class="nav-link">Решения <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="#faq" class="nav-link">Ресурсы <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="#pricing" class="nav-link">Тарифы</a>
+        <a href="#solutions" class="nav-link">Для бизнеса</a>
+      </nav>
+
+      <div class="hidden lg:flex items-center gap-1">
+        <a href="#" class="nav-link text-muted hidden xl:inline-flex" aria-label="Язык" title="Русский">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>
+        </a>
+        <span class="mx-1 hidden h-5 w-px bg-line xl:block"></span>
+        <button class="nav-link" data-open-modal="login">Войти</button>
+        <button class="nav-link hidden xl:inline-flex" data-open-modal="demo">Заказать демо</button>
+        <button class="btn btn-primary ml-2 !rounded-lg !px-4 !py-2 !text-[0.875rem]" data-open-modal="signup">Начать бесплатно <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+
+      <button id="burger" class="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-soft" aria-label="Открыть меню" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#090B22" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="lg:hidden hidden border-t border-line bg-white">
+    <div class="px-5 py-4 flex flex-col gap-1">
+      <a href="#features" class="nav-link">Платформа</a>
+      <a href="#solutions" class="nav-link">Решения</a>
+      <a href="#faq" class="nav-link">Ресурсы</a>
+      <a href="#pricing" class="nav-link">Тарифы</a>
+      <a href="#solutions" class="nav-link">Для бизнеса</a>
+      <div class="mt-3 flex flex-col gap-2">
+        <button class="btn btn-outline justify-center" data-open-modal="login">Войти</button>
+        <button class="btn btn-primary justify-center" data-open-modal="signup">Начать бесплатно</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="relative overflow-hidden bg-white">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8 pt-16 pb-10 sm:pt-[6.5rem] sm:pb-[3.75rem] text-center">
+    <div class="inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-2 text-[0.75rem] sm:text-[0.8125rem] font-semibold tracking-wide text-ink shadow-sm">
+      <span class="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white text-[0.6875rem]">₽</span>
+      БЕСПЛАТНО ДЛЯ СТАРТАПОВ · 152-ФЗ<span class="hidden sm:inline"> · СЕРВЕРЫ В РФ</span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#6B6E80" stroke-width="1.4"><circle cx="8" cy="8" r="6.5"/><path d="M8 7v4M8 5v.5" stroke-linecap="round"/></svg>
+    </div>
+
+    <h1 class="h-display mx-auto mt-7 max-w-[60rem] text-ink">
+      Партнёрская программа для вашего продукта за&nbsp;10&nbsp;минут
+    </h1>
+    <p class="mx-auto mt-6 max-w-[40rem] text-[1.0625rem] leading-[1.5rem] sm:text-[1.125rem] text-body">
+      Подключите реферальную, партнёрскую или амбассадорскую программу к сайту, Telegram-боту или API. Аналитика, антифрод и выплаты — в одном кабинете.
+    </p>
+    <div class="mt-8 flex justify-center">
+      <button class="btn btn-primary !rounded-xl !px-6 !py-4 !text-[1.125rem]" data-open-modal="signup">Начать бесплатно <svg class="arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div class="mt-5 flex items-center justify-center gap-4 text-[0.875rem] text-muted">
+      <span>Без банковской карты</span>
+      <span class="h-4 w-px bg-line"></span>
+      <span>Интеграция за 10 минут</span>
+    </div>
+  </div>
+
+  <!-- Hero product mock -->
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8 pb-20">
+    <div class="rounded-[1.75rem] bg-soft p-3 sm:p-5">
+      <div class="mb-4 flex flex-wrap items-center justify-center gap-2" id="hero-tabs">
+        <button class="tab on" data-hero="overview">Обзор</button>
+        <button class="tab" data-hero="partners">Партнёры</button>
+        <button class="tab" data-hero="payouts">Выплаты</button>
+        <button class="tab" data-hero="fraud">Антифрод</button>
+      </div>
+      <div class="mock-window overflow-hidden">
+        <div class="flex items-center gap-2 border-b border-line px-4 py-2.5 text-[0.75rem] text-muted">
+          <span class="h-2.5 w-2.5 rounded-full bg-[#FF5F57]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]"></span><span class="h-2.5 w-2.5 rounded-full bg-[#28C840]"></span>
+          <span class="ml-3 rounded-md bg-soft px-2 py-0.5 font-mono">app.partnerka.io/dashboard</span>
+        </div>
+        <div class="grid grid-cols-[11.25rem_1fr] sm:grid-cols-[13.75rem_1fr]">
+          <aside class="hidden sm:block border-r border-line p-4 text-[0.8125rem]">
+            <div class="mb-3 flex items-center gap-2 text-ink font-semibold"><span class="h-6 w-6 rounded-md bg-brand"></span> Skyline CRM</div>
+            <ul class="space-y-1 text-body">
+              <li class="rounded-lg bg-brandlight px-3 py-1.5 text-brand font-medium">Обзор</li>
+              <li class="px-3 py-1.5">Партнёры</li>
+              <li class="px-3 py-1.5">Конверсии</li>
+              <li class="px-3 py-1.5">Отчёты</li>
+              <li class="px-3 py-1.5">Выплаты</li>
+              <li class="px-3 py-1.5">Антифрод</li>
+              <li class="px-3 py-1.5">Договоры</li>
+              <li class="px-3 py-1.5">Интеграции</li>
+            </ul>
+          </aside>
+          <div class="p-4 sm:p-6 col-span-2 sm:col-span-1" id="hero-panel">
+            <!-- OVERVIEW -->
+            <div data-panel="overview">
+              <div class="mb-4 flex items-center justify-between">
+                <div class="text-[0.9375rem] font-semibold text-ink">Обзор за 30 дней</div>
+                <div class="pill bg-soft text-muted">1 – 30 сентября</div>
+              </div>
+              <div class="grid grid-cols-2 gap-3 md:grid-cols-5">
+                <div class="rounded-xl border border-line p-3"><div class="text-[0.6875rem] text-muted">Клики</div><div class="text-[1.25rem] font-semibold text-ink">84 312</div><div class="text-[0.6875rem] text-emerald-600">+12,4%</div></div>
+                <div class="rounded-xl border border-line p-3"><div class="text-[0.6875rem] text-muted">Конверсии</div><div class="text-[1.25rem] font-semibold text-ink">2 947</div><div class="text-[0.6875rem] text-emerald-600">+8,1%</div></div>
+                <div class="rounded-xl border border-line p-3"><div class="text-[0.6875rem] text-muted">CR</div><div class="text-[1.25rem] font-semibold text-ink">3,49%</div><div class="text-[0.6875rem] text-emerald-600">+0,3 п.п.</div></div>
+                <div class="rounded-xl border border-line p-3"><div class="text-[0.6875rem] text-muted">EPC</div><div class="text-[1.25rem] font-semibold text-ink">41 ₽</div><div class="text-[0.6875rem] text-red-500">−2,2%</div></div>
+                <div class="rounded-xl border border-line p-3 col-span-2 md:col-span-1"><div class="text-[0.6875rem] text-muted">Прибыль</div><div class="text-[1.25rem] font-semibold text-ink">1,84 млн ₽</div><div class="text-[0.6875rem] text-emerald-600">+15,7%</div></div>
+              </div>
+              <div class="mt-4 rounded-xl border border-line p-4">
+                <div class="mb-3 flex items-center justify-between text-[0.75rem] text-muted"><span>Оборот по дням</span><span>Выплаты партнёрам: <b class="text-ink">18,2%</b> от оборота</span></div>
+                <div class="flex h-[6.875rem] items-end gap-[0.375rem]">
+                  <div class="bar w-full opacity-40" style="height:35%"></div><div class="bar w-full opacity-40" style="height:48%"></div><div class="bar w-full opacity-40" style="height:42%"></div><div class="bar w-full opacity-40" style="height:60%"></div><div class="bar w-full opacity-40" style="height:55%"></div><div class="bar w-full opacity-40" style="height:70%"></div><div class="bar w-full opacity-40" style="height:64%"></div><div class="bar w-full opacity-40" style="height:58%"></div><div class="bar w-full opacity-40" style="height:76%"></div><div class="bar w-full opacity-40" style="height:81%"></div><div class="bar w-full opacity-40" style="height:68%"></div><div class="bar w-full opacity-40" style="height:88%"></div><div class="bar w-full opacity-40" style="height:74%"></div><div class="bar w-full" style="height:96%"></div>
+                </div>
+              </div>
+            </div>
+            <!-- PARTNERS -->
+            <div data-panel="partners" class="hidden">
+              <div class="mb-4 flex items-center justify-between"><div class="text-[0.9375rem] font-semibold text-ink">Партнёры</div><div class="pill bg-brandlight text-brand">+ Пригласить</div></div>
+              <table class="w-full text-[0.8125rem]">
+                <thead class="text-muted text-[0.6875rem] uppercase tracking-wide"><tr class="border-b border-line"><th class="py-2 text-left font-medium">Партнёр</th><th class="py-2 text-left font-medium">Тип</th><th class="py-2 text-right font-medium">Клики</th><th class="py-2 text-right font-medium">CR</th><th class="py-2 text-right font-medium">Начислено</th></tr></thead>
+                <tbody class="text-ink">
+                  <tr class="border-b border-line"><td class="py-2.5">@growth_hacks (Telegram)</td><td>Revshare 30%</td><td class="text-right">21 480</td><td class="text-right">4,1%</td><td class="text-right font-medium">312 400 ₽</td></tr>
+                  <tr class="border-b border-line"><td class="py-2.5">Кэшбэк-сервис Bonus</td><td>Процент 12%</td><td class="text-right">18 910</td><td class="text-right">3,7%</td><td class="text-right font-medium">198 050 ₽</td></tr>
+                  <tr class="border-b border-line"><td class="py-2.5">Анна Морозова (блогер)</td><td>Фикс 900 ₽</td><td class="text-right">9 730</td><td class="text-right">2,9%</td><td class="text-right font-medium">254 700 ₽</td></tr>
+                  <tr class="border-b border-line"><td class="py-2.5">Выпускники курса</td><td>Реферальная</td><td class="text-right">6 122</td><td class="text-right">5,6%</td><td class="text-right font-medium">121 300 ₽</td></tr>
+                  <tr><td class="py-2.5">SEO-сайт review-crm.ru</td><td>Revshare 25%</td><td class="text-right">5 480</td><td class="text-right">2,2%</td><td class="text-right font-medium">88 900 ₽</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- PAYOUTS -->
+            <div data-panel="payouts" class="hidden">
+              <div class="mb-4 flex items-center justify-between"><div class="text-[0.9375rem] font-semibold text-ink">Запросы на выплату</div><div class="text-[0.75rem] text-muted">Общий баланс перед партнёрами: <b class="text-ink">1 274 350 ₽</b></div></div>
+              <div class="space-y-2 text-[0.8125rem]">
+                <div class="flex items-center justify-between rounded-xl border border-line p-3"><div><div class="font-medium text-ink">@growth_hacks</div><div class="text-muted text-[0.75rem]">Запрошено 22 сен · Реквизиты: ИП, р/с</div></div><div class="flex items-center gap-3"><span class="font-semibold text-ink">312 400 ₽</span><span class="pill bg-amber-100 text-amber-700">На проверке</span></div></div>
+                <div class="flex items-center justify-between rounded-xl border border-line p-3"><div><div class="font-medium text-ink">Bonus кэшбэк</div><div class="text-muted text-[0.75rem]">Запрошено 20 сен · Самозанятый</div></div><div class="flex items-center gap-3"><span class="font-semibold text-ink">198 050 ₽</span><span class="pill bg-brandlight text-brand">Одобрено</span></div></div>
+                <div class="flex items-center justify-between rounded-xl border border-line p-3"><div><div class="font-medium text-ink">Анна Морозова</div><div class="text-muted text-[0.75rem]">Выплачено 18 сен · Акт сформирован</div></div><div class="flex items-center gap-3"><span class="font-semibold text-ink">254 700 ₽</span><span class="pill bg-emerald-100 text-emerald-700">Выплачено</span></div></div>
+                <div class="flex items-center justify-between rounded-xl border border-line p-3"><div><div class="font-medium text-ink">review-crm.ru</div><div class="text-muted text-[0.75rem]">Отклонено 15 сен · Fraud-score 0,82</div></div><div class="flex items-center gap-3"><span class="font-semibold text-ink">88 900 ₽</span><span class="pill bg-red-100 text-red-600">Отклонено</span></div></div>
+              </div>
+            </div>
+            <!-- FRAUD -->
+            <div data-panel="fraud" class="hidden">
+              <div class="mb-4 flex items-center justify-between"><div class="text-[0.9375rem] font-semibold text-ink">Антифрод · последние конверсии</div><div class="pill bg-soft text-muted">Порог: 0,70</div></div>
+              <div class="space-y-2 text-[0.8125rem]">
+                <div class="grid grid-cols-[1fr_auto_auto] items-center gap-4 rounded-xl border border-line p-3"><div><div class="font-medium text-ink">#48213 · Оплата тарифа Pro</div><div class="text-muted text-[0.75rem]">subid=tg_post_14 · Новый клиент</div></div><div class="h-2 w-28 rounded-full bg-soft"><div class="h-2 w-[12%] rounded-full bg-emerald-500"></div></div><span class="font-mono text-emerald-600">0,12</span></div>
+                <div class="grid grid-cols-[1fr_auto_auto] items-center gap-4 rounded-xl border border-line p-3"><div><div class="font-medium text-ink">#48214 · Заказ 3 240 ₽</div><div class="text-muted text-[0.75rem]">subid=yt_review · Совпадение устройства</div></div><div class="h-2 w-28 rounded-full bg-soft"><div class="h-2 w-[41%] rounded-full bg-amber-500"></div></div><span class="font-mono text-amber-600">0,41</span></div>
+                <div class="grid grid-cols-[1fr_auto_auto] items-center gap-4 rounded-xl border border-line p-3"><div><div class="font-medium text-ink">#48215 · Регистрация</div><div class="text-muted text-[0.75rem]">Self-referral · IP партнёра</div></div><div class="h-2 w-28 rounded-full bg-soft"><div class="h-2 w-[94%] rounded-full bg-red-500"></div></div><span class="font-mono text-red-600">0,94</span></div>
+                <div class="grid grid-cols-[1fr_auto_auto] items-center gap-4 rounded-xl border border-line p-3"><div><div class="font-medium text-ink">#48216 · Оплата курса</div><div class="text-muted text-[0.75rem]">Мультиаккаунт · 6 регистраций с одного fingerprint</div></div><div class="h-2 w-28 rounded-full bg-soft"><div class="h-2 w-[82%] rounded-full bg-red-500"></div></div><span class="font-mono text-red-600">0,82</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features" class="py-16 sm:py-24">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+    <div class="text-center">
+      <h2 class="h-section mx-auto max-w-[56.25rem] text-ink">Одна платформа, чтобы подключить, отслеживать, считать и выплачивать</h2>
+      <p class="mx-auto mt-5 max-w-[40rem] text-[1.0625rem] sm:text-[1.125rem] text-body">Весь цикл партнёрской программы в одном инструменте. От первой ссылки до акта с партнёром.</p>
+    </div>
+
+    <div class="mt-14 grid min-w-0 gap-10 lg:grid-cols-[12.5rem_1fr] xl:grid-cols-[16.25rem_1fr]">
+      <!-- side nav -->
+      <aside class="min-w-0 lg:sticky lg:top-28 lg:self-start">
+        <nav id="side-nav" class="flex max-w-full gap-5 overflow-x-auto pb-2 lg:flex-col lg:gap-1 lg:overflow-visible" aria-label="Разделы возможностей">
+          <a class="side-link active" href="#g-connect" data-target="g-connect"><svg class="side-arrow" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M12 5l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Подключить</a>
+          <a class="side-link" href="#g-analytics" data-target="g-analytics"><svg class="side-arrow" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M12 5l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Анализировать</a>
+          <a class="side-link" href="#g-partners" data-target="g-partners"><svg class="side-arrow" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M12 5l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Партнёры</a>
+          <a class="side-link" href="#g-payouts" data-target="g-payouts"><svg class="side-arrow" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M12 5l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Выплачивать</a>
+        </nav>
+      </aside>
+
+      <div class="min-w-0 space-y-6">
+        <!-- GROUP: CONNECT -->
+        <div id="g-connect" class="feature-group grid min-w-0 gap-6 xl:grid-cols-2">
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Интеграция за 10 минут</div>
+            <h3 class="h-card mt-3 text-ink">Подключается к любому проекту</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Сайт на любой CMS, Telegram-бот, Webhooks, REST API или сценарий в n8n. Один скрипт или один запрос — и конверсии уже считаются.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#C9D3FF] to-[#4B5BEA] p-6">
+              <div class="flex flex-wrap gap-2">
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-[#21759B]"></span>WordPress</span>
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-[#FF8562]"></span>Tilda</span>
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-[#2AABEE]"></span>Telegram-бот</span>
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-[#7ED321]"></span>Bitrix24</span>
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-[#EA4B71]"></span>n8n</span>
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-[#090B22]"></span>Webhooks</span>
+                <span class="chip"><span class="h-2 w-2 rounded-full bg-brand"></span>REST API</span>
+              </div>
+              <div class="mock-window mt-5 p-4 font-mono text-[0.75rem] leading-relaxed text-ink break-words [overflow-wrap:anywhere]">
+                <div class="text-muted">// одна строка на сайт</div>
+                <div>&lt;script src="<span class="text-brand">https://cdn.partnerka.io/p.js</span>" data-key="pk_live_9f3a"&gt;&lt;/script&gt;</div>
+                <div class="mt-3 text-muted">// или событие из бэкенда</div>
+                <div>POST /v1/conversions <span class="text-muted">{ order: "A-1042", amount: 4900, subid: "tg_14" }</span></div>
+                <div class="mt-2 inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>201 Created · конверсия засчитана партнёру @growth_hacks</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Программы любого типа</div>
+            <h3 class="h-card mt-3 text-ink">Реферальные, партнёрские, амбассадорские</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Фикс-ставка, процент от оплаты или revshare — настройте вознаграждение под свою воронку. Несколько программ параллельно, каждая со своими условиями.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#0D0F2C] to-[#2B3390] p-6">
+              <div class="mock-window p-5">
+                <div class="mb-4 text-[0.875rem] font-semibold text-ink">Новая программа · Вознаграждение</div>
+                <div class="grid grid-cols-3 gap-1.5 text-[0.6875rem] sm:gap-2 sm:text-[0.75rem]">
+                  <div class="rounded-xl border border-line p-2 sm:p-3"><div class="text-muted">Фикс</div><div class="mt-1 text-[1rem] font-semibold text-ink">900 ₽</div><div class="text-muted">за оплату</div></div>
+                  <div class="rounded-xl border border-line p-2 sm:p-3"><div class="text-muted">Процент</div><div class="mt-1 text-[1rem] font-semibold text-ink">12%</div><div class="text-muted">от чека</div></div>
+                  <div class="rounded-xl border-2 border-brand bg-brandlight p-2 sm:p-3"><div class="text-brand font-medium">Revshare</div><div class="mt-1 text-[1rem] font-semibold text-ink">30%</div><div class="text-brand">каждый месяц</div></div>
+                </div>
+                <div class="mt-4 space-y-2 text-[0.8125rem] text-ink">
+                  <div class="flex items-center justify-between"><span>Срок действия cookie</span><span class="rounded-md bg-soft px-2 py-0.5 font-medium">90 дней</span></div>
+                  <div class="flex items-center justify-between"><span>Холд перед начислением</span><span class="rounded-md bg-soft px-2 py-0.5 font-medium">14 дней</span></div>
+                  <div class="flex items-center justify-between"><span>Многоуровневая (2-й уровень)</span><span class="inline-block h-5 w-9 rounded-full bg-brand p-0.5"><span class="block h-4 w-4 translate-x-4 rounded-full bg-white"></span></span></div>
+                </div>
+                <div class="mt-4 flex gap-2"><span class="pill bg-ink text-white">Сохранить</span><span class="pill bg-soft text-muted">Предпросмотр оффера</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- GROUP: ANALYTICS -->
+        <div id="g-analytics" class="feature-group grid min-w-0 gap-6 xl:grid-cols-2">
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Аналитика уровня больших сетей</div>
+            <h3 class="h-card mt-3 text-ink">Отчёты по партнёрам, subid и сегментам трафика</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Разрезы по партнёрам, ссылкам, subid, источникам, гео и устройствам. Сравнивайте периоды и находите каналы, которые действительно приносят прибыль.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#DCE4FF] to-[#8FA3FF] p-6">
+              <div class="mock-window p-5">
+                <div class="mb-3 flex flex-wrap items-center gap-2 text-[0.75rem]"><span class="pill bg-ink text-white">По subid</span><span class="pill bg-soft text-muted">По партнёрам</span><span class="pill bg-soft text-muted">По гео</span><span class="pill bg-soft text-muted">По устройствам</span></div>
+                <table class="w-full text-[0.75rem] text-ink">
+                  <thead class="text-[0.6875rem] uppercase tracking-wide text-muted"><tr class="border-b border-line"><th class="py-1.5 text-left font-medium">subid</th><th class="text-right font-medium">Клики</th><th class="text-right font-medium">CR</th><th class="text-right font-medium">EPC</th><th class="text-right font-medium">Прибыль</th></tr></thead>
+                  <tbody>
+                    <tr class="border-b border-line"><td class="py-1.5 font-mono">tg_post_14</td><td class="text-right">12 402</td><td class="text-right">4,8%</td><td class="text-right">52 ₽</td><td class="text-right font-medium text-emerald-600">+412 300 ₽</td></tr>
+                    <tr class="border-b border-line"><td class="py-1.5 font-mono">yt_review</td><td class="text-right">8 115</td><td class="text-right">3,1%</td><td class="text-right">38 ₽</td><td class="text-right font-medium text-emerald-600">+196 100 ₽</td></tr>
+                    <tr class="border-b border-line"><td class="py-1.5 font-mono">vk_ads_retarget</td><td class="text-right">6 930</td><td class="text-right">1,2%</td><td class="text-right">9 ₽</td><td class="text-right font-medium text-red-500">−14 800 ₽</td></tr>
+                    <tr><td class="py-1.5 font-mono">email_digest</td><td class="text-right">3 244</td><td class="text-right">6,4%</td><td class="text-right">71 ₽</td><td class="text-right font-medium text-emerald-600">+158 700 ₽</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Все ключевые метрики</div>
+            <h3 class="h-card mt-3 text-ink">EPC, конверсия, средний чек, прибыль</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Считаем EPC, CR, средний чек, прибыль и долю выплат от оборота автоматически. Видно, сколько зарабатывает каждый партнёр и сколько зарабатываете вы.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#FFE8C7] to-[#FFB870] p-6">
+              <div class="grid grid-cols-2 gap-3">
+                <div class="mock-window p-4"><div class="text-[0.6875rem] text-muted">EPC</div><div class="mt-1 text-[1.5rem] font-semibold text-ink tracking-tight">41,2 ₽</div><div class="mt-2 flex h-8 items-end gap-[0.1875rem]"><span class="bar w-full opacity-30" style="height:40%"></span><span class="bar w-full opacity-30" style="height:55%"></span><span class="bar w-full opacity-30" style="height:45%"></span><span class="bar w-full opacity-30" style="height:70%"></span><span class="bar w-full opacity-30" style="height:60%"></span><span class="bar w-full opacity-30" style="height:85%"></span><span class="bar w-full" style="height:100%"></span></div></div>
+                <div class="mock-window p-4"><div class="text-[0.6875rem] text-muted">Конверсия</div><div class="mt-1 text-[1.5rem] font-semibold text-ink tracking-tight">3,49%</div><div class="mt-2 text-[0.75rem] text-emerald-600">+0,3 п.п. к прошлому месяцу</div></div>
+                <div class="mock-window p-4"><div class="text-[0.6875rem] text-muted">Средний чек</div><div class="mt-1 text-[1.5rem] font-semibold text-ink tracking-tight">4 870 ₽</div><div class="mt-2 text-[0.75rem] text-muted">по 2 947 конверсиям</div></div>
+                <div class="mock-window p-4"><div class="text-[0.6875rem] text-muted">Прибыль</div><div class="mt-1 text-[1.5rem] font-semibold text-ink tracking-tight">1,84 млн ₽</div><div class="mt-2 text-[0.75rem] text-muted">после выплат партнёрам</div></div>
+                <div class="mock-window col-span-2 p-4"><div class="flex items-center justify-between text-[0.75rem]"><span class="text-muted">Выплаты партнёрам от оборота</span><span class="font-semibold text-ink">18,2%</span></div><div class="mt-2 h-2.5 w-full rounded-full bg-soft"><div class="h-2.5 w-[18.2%] rounded-full bg-brand"></div></div><div class="mt-1.5 flex justify-between text-[0.6875rem] text-muted"><span>Оборот 10,1 млн ₽</span><span>Целевой порог 25%</span></div></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- GROUP: PARTNERS -->
+        <div id="g-partners" class="feature-group grid min-w-0 gap-6 xl:grid-cols-2">
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Кабинет партнёра</div>
+            <h3 class="h-card mt-3 text-ink">Мультиссылки, сабы и диплинки</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Партнёр создаёт сколько угодно ссылок с subid, ведёт трафик на любую страницу через диплинк и видит статистику в разрезе каждой ссылки и саба.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#D9F5EC] to-[#5BC9A6] p-6">
+              <div class="mock-window p-5">
+                <div class="mb-3 text-[0.8125rem] font-semibold text-ink">Мои ссылки</div>
+                <div class="space-y-2 text-[0.75rem]">
+                  <div class="flex items-center justify-between rounded-lg border border-line p-2.5"><div><div class="font-mono text-ink">partnerka.io/r/anna?subid=tg_14</div><div class="text-muted">Telegram-пост от 14 сен · диплинк на /pricing</div></div><span class="font-medium text-ink">4,8% CR</span></div>
+                  <div class="flex items-center justify-between rounded-lg border border-line p-2.5"><div><div class="font-mono text-ink">partnerka.io/r/anna?subid=yt_review</div><div class="text-muted">YouTube-обзор · диплинк на /blog/case</div></div><span class="font-medium text-ink">3,1% CR</span></div>
+                  <div class="flex items-center justify-between rounded-lg border border-line p-2.5"><div><div class="font-mono text-ink">partnerka.io/r/anna?subid=stories</div><div class="text-muted">Stories · главная</div></div><span class="font-medium text-ink">2,4% CR</span></div>
+                </div>
+                <div class="mt-3 flex items-center gap-2 rounded-lg bg-soft p-2 text-[0.75rem]"><span class="text-muted">Диплинк:</span><span class="flex-1 rounded-md bg-white px-2 py-1 font-mono text-ink">skyline-crm.ru/pricing?plan=pro</span><span class="pill bg-ink text-white">Создать</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Антифрод-модуль</div>
+            <h3 class="h-card mt-3 text-ink">Фейк-клики, мультиаккаунты и self-referrals</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Детекция подозрительного трафика по fingerprint, IP и поведению. Прозрачный fraud-score по каждой конверсии — вы решаете, что засчитать, а что отклонить.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#FFD9D9] to-[#FF7A7A] p-6">
+              <div class="mock-window p-5">
+                <div class="mb-3 flex items-center justify-between text-[0.8125rem]"><span class="font-semibold text-ink">Конверсия #48215</span><span class="pill bg-red-100 text-red-600">Fraud-score 0,94</span></div>
+                <div class="space-y-2 text-[0.75rem] text-ink">
+                  <div class="flex items-center gap-2"><span class="h-4 w-4 rounded-full bg-red-500 text-white text-[0.625rem] flex items-center justify-center">!</span>Self-referral: IP совпадает с IP партнёра</div>
+                  <div class="flex items-center gap-2"><span class="h-4 w-4 rounded-full bg-red-500 text-white text-[0.625rem] flex items-center justify-center">!</span>6 регистраций с одного fingerprint за 2 часа</div>
+                  <div class="flex items-center gap-2"><span class="h-4 w-4 rounded-full bg-amber-500 text-white text-[0.625rem] flex items-center justify-center">?</span>Время от клика до покупки: 4 секунды</div>
+                  <div class="flex items-center gap-2"><span class="h-4 w-4 rounded-full bg-emerald-500 text-white text-[0.625rem] flex items-center justify-center">✓</span>Платёжный метод ранее не использовался</div>
+                </div>
+                <div class="mt-4 flex gap-2"><span class="pill bg-ink text-white">Отклонить</span><span class="pill bg-soft text-muted">Засчитать</span><span class="pill bg-soft text-muted">Запросить проверку</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- GROUP: PAYOUTS -->
+        <div id="g-payouts" class="feature-group grid min-w-0 gap-6 xl:grid-cols-2">
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Расчёты с партнёрами</div>
+            <h3 class="h-card mt-3 text-ink">Запросы выплат, статусы и общий баланс</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Вебмастер запрашивает выплату в кабинете, вы одобряете в один клик. Статусы, история и общий баланс перед всеми партнёрами всегда под рукой.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#E4E7FF] to-[#5A6BFF] p-6">
+              <div class="mock-window p-5">
+                <div class="mb-3 flex items-center justify-between text-[0.8125rem]"><span class="font-semibold text-ink">Баланс перед партнёрами</span><span class="text-[1.125rem] font-semibold text-ink tracking-tight">1 274 350 ₽</span></div>
+                <div class="space-y-2 text-[0.75rem]">
+                  <div class="flex items-center justify-between rounded-lg border border-line p-2.5"><span class="text-ink">@growth_hacks · 312 400 ₽</span><span class="pill bg-amber-100 text-amber-700">На проверке</span></div>
+                  <div class="flex items-center justify-between rounded-lg border border-line p-2.5"><span class="text-ink">Bonus кэшбэк · 198 050 ₽</span><span class="pill bg-brandlight text-brand">Одобрено</span></div>
+                  <div class="flex items-center justify-between rounded-lg border border-line p-2.5"><span class="text-ink">Анна Морозова · 254 700 ₽</span><span class="pill bg-emerald-100 text-emerald-700">Выплачено</span></div>
+                </div>
+                <div class="mt-3 grid grid-cols-3 gap-2 text-center text-[0.6875rem]"><div class="rounded-lg bg-soft p-2"><div class="text-muted">Ожидает</div><div class="font-semibold text-ink">510 450 ₽</div></div><div class="rounded-lg bg-soft p-2"><div class="text-muted">Выплачено за месяц</div><div class="font-semibold text-ink">763 900 ₽</div></div><div class="rounded-lg bg-soft p-2"><div class="text-muted">Минималка</div><div class="font-semibold text-ink">5 000 ₽</div></div></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card min-w-0 p-7 sm:p-8 fade-up">
+            <div class="eyebrow text-brand">Юридическая помощь · 152-ФЗ</div>
+            <h3 class="h-card mt-3 text-ink">Шаблоны договоров и соответствие закону</h3>
+            <p class="mt-3 text-[1rem] leading-relaxed text-body">Готовые шаблоны договоров с партнёрами, ИП и самозанятыми, оферта и акты. Данные хранятся в России, обработка соответствует 152-ФЗ.</p>
+            <div class="visual mt-7 bg-gradient-to-b from-[#EDEDF2] to-[#B9BBCB] p-6">
+              <div class="grid grid-cols-2 gap-3">
+                <div class="mock-window p-4 text-[0.75rem]"><div class="mb-2 h-8 w-8 rounded-lg bg-brandlight text-brand flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6M9 13h6M9 17h6"/></svg></div><div class="font-medium text-ink">Агентский договор</div><div class="text-muted">для ИП и юрлиц</div></div>
+                <div class="mock-window p-4 text-[0.75rem]"><div class="mb-2 h-8 w-8 rounded-lg bg-brandlight text-brand flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6M9 13h6M9 17h6"/></svg></div><div class="font-medium text-ink">Договор с самозанятым</div><div class="text-muted">чек через «Мой налог»</div></div>
+                <div class="mock-window p-4 text-[0.75rem]"><div class="mb-2 h-8 w-8 rounded-lg bg-brandlight text-brand flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v6h6M9 13h6M9 17h6"/></svg></div><div class="font-medium text-ink">Оферта партнёрской программы</div><div class="text-muted">публичная, редактируемая</div></div>
+                <div class="mock-window p-4 text-[0.75rem]"><div class="mb-2 h-8 w-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div><div class="font-medium text-ink">152-ФЗ · ЦОД в РФ</div><div class="text-muted">согласия и политика ПДн</div></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLUTIONS + LOGOS ============ -->
+<section id="solutions" class="py-16 sm:py-24">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <div class="max-w-[47.5rem]"><h2 class="h-section h-md text-ink">Подходит SaaS, e-commerce и&nbsp;онлайн-школам</h2><p class="mt-4 text-[1.0625rem] sm:text-[1.125rem] text-body">Проверено маркетингом, одобрено финансами, согласовано юристами.</p></div>
+      <button class="btn btn-primary shrink-0" data-open-modal="demo">Заказать демо <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+
+    <div class="mt-12 grid gap-5 md:grid-cols-3">
+      <article class="card p-7 sm:p-8 flex flex-col fade-up">
+        <div class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white shadow-sm text-brand"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7a8 8 0 0116 0v10a8 8 0 01-16 0z"/><path d="M4 12h16"/></svg></div>
+        <h3 class="h-card h-card-sm text-ink">SaaS-продукты</h3>
+        <p class="mt-3 text-[1rem] leading-relaxed text-body">Recurring revenue share — платите партнёру каждый месяц, пока клиент платит вам. Полная атрибуция по подпискам, апгрейдам и оттоку.</p>
+        <a href="#" class="mt-auto pt-6 inline-flex items-center gap-2 font-medium text-ink">Подробнее о SaaS <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="card p-7 sm:p-8 flex flex-col fade-up">
+        <div class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white shadow-sm text-brand"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 4h2l2.5 11h11L21 7H7"/><circle cx="9" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg></div>
+        <h3 class="h-card h-card-sm text-ink">E-commerce</h3>
+        <p class="mt-3 text-[1rem] leading-relaxed text-body">Подключайте кэшбэк-сервисы, инфлюенсеров и Telegram-каналы. Промокоды и UTM-метки — встроены, атрибуция по заказу и возвратам.</p>
+        <a href="#" class="mt-auto pt-6 inline-flex items-center gap-2 font-medium text-ink">Подробнее о e-commerce <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+      <article class="card p-7 sm:p-8 flex flex-col fade-up">
+        <div class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white shadow-sm text-brand"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/></svg></div>
+        <h3 class="h-card h-card-sm text-ink">Онлайн-школы</h3>
+        <p class="mt-3 text-[1rem] leading-relaxed text-body">Привлекайте студентов через выпускников и блогеров. Cookie 90 дней, выплата после оплаты курса, учёт рассрочек и возвратов.</p>
+        <a href="#" class="mt-auto pt-6 inline-flex items-center gap-2 font-medium text-ink">Подробнее об онлайн-школах <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+    </div>
+
+    <!-- logos marquee -->
+    <div class="mt-16">
+      <p class="mb-8 text-center text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-muted">Партнёрские программы на нашей платформе запускают</p>
+      <div class="marquee">
+        <div class="marquee-track" id="marquee-track">
+          <span class="logo">OZON</span>
+          <span class="logo"><span class="inline-block h-6 w-6 rounded-md bg-[#0F9D58]"></span>Skyeng</span>
+          <span class="logo" style="font-weight:800">Т-Банк</span>
+          <span class="logo" style="font-weight:500;letter-spacing:.02em">LAMODA</span>
+          <span class="logo">Skillbox</span>
+          <span class="logo"><span class="inline-block h-6 w-6 rounded-full bg-[#FC3F1D]"></span>Яндекс Маркет</span>
+          <span class="logo" style="font-weight:800;letter-spacing:-.05em">WILDBERRIES</span>
+          <span class="logo">Нетология</span>
+          <span class="logo" style="font-weight:600">Авито</span>
+          <span class="logo" style="font-weight:800;font-style:italic">Самокат</span>
+          <span class="logo"><span class="inline-block h-6 w-6 rounded-md bg-[#7B61FF]"></span>GeekBrains</span>
+          <span class="logo" style="font-weight:600">СберМаркет</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing" class="py-16 sm:py-24">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+    <div class="text-center">
+      <h2 class="h-section mx-auto max-w-[50rem] text-ink">Простые тарифы. Бесплатно, пока вы растёте</h2>
+      <p class="mx-auto mt-5 max-w-[40rem] text-[1.0625rem] sm:text-[1.125rem] text-body">Полный функционал на обоих тарифах. Платите только когда партнёрская программа начала приносить трафик.</p>
+      <div class="mt-8 inline-flex items-center gap-1 rounded-full border border-line bg-soft p-1" id="billing-toggle" role="tablist" aria-label="Период оплаты">
+        <button class="tab on" data-billing="monthly" role="tab" aria-selected="true">В месяц</button>
+        <button class="tab" data-billing="yearly" role="tab" aria-selected="false">За год <span class="ml-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[0.75rem] font-semibold text-emerald-700">−20%</span></button>
+      </div>
+    </div>
+
+    <div class="mx-auto mt-12 grid max-w-[56rem] gap-5 md:grid-cols-2">
+      <!-- FREE -->
+      <article class="card flex flex-col p-7 sm:p-8 fade-up">
+        <div class="flex items-center justify-between">
+          <h3 class="h-card h-card-sm text-ink">Старт</h3>
+          <span class="pill bg-white text-muted border border-line">Навсегда бесплатно</span>
+        </div>
+        <p class="mt-2 text-[0.9375rem] text-body">Для стартапов и первых экспериментов с партнёрами.</p>
+        <div class="mt-6 flex items-end gap-2">
+          <span class="h-display !text-[3rem] text-ink">0 ₽</span>
+          <span class="mb-2 text-[0.9375rem] text-muted">/ месяц</span>
+        </div>
+        <button class="btn btn-outline mt-6 w-full justify-center" data-open-modal="signup">Начать бесплатно</button>
+        <ul class="mt-7 space-y-3 text-[0.9375rem] text-ink">
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-ink" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span><b class="font-semibold">Полный функционал:</b> все типы программ, аналитика, антифрод, кабинет партнёра</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-ink" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>До <b class="font-semibold">2 партнёров</b></span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-ink" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>До <b class="font-semibold">1 000 кликов</b> в месяц</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-ink" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Интеграции: скрипт, REST API, Webhooks, n8n, Telegram-бот</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-ink" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Шаблоны договоров и соответствие 152-ФЗ</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-ink" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Поддержка по e-mail</span></li>
+        </ul>
+      </article>
+
+      <!-- PAID -->
+      <article class="relative flex flex-col rounded-[1.75rem] bg-ink p-7 text-white sm:p-8 fade-up">
+        <div class="flex items-center justify-between">
+          <h3 class="h-card h-card-sm">Рост</h3>
+          <span class="pill bg-brand text-white">Популярный</span>
+        </div>
+        <p class="mt-2 text-[0.9375rem] text-white/70">Для проектов, у которых партнёры уже приводят клиентов.</p>
+        <div class="mt-6 flex items-end gap-2">
+          <span class="h-display !text-[3rem]" data-price data-monthly="999 ₽" data-yearly="799 ₽">999 ₽</span>
+          <span class="mb-2 text-[0.9375rem] text-white/60">/ месяц</span>
+        </div>
+        <p class="mt-1 min-h-[1.25rem] text-[0.8125rem] text-white/60" data-price-note data-monthly="Помесячная оплата, отмена в любой момент" data-yearly="9 588 ₽ за год при оплате сразу, экономия 2 400 ₽">Помесячная оплата, отмена в любой момент</p>
+        <button class="btn btn-white mt-5 w-full justify-center" data-open-modal="signup">Подключить «Рост» <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <ul class="mt-7 space-y-3 text-[0.9375rem]">
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Всё из тарифа «Старт»</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span><b class="font-semibold">Партнёры без ограничений</b></span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>До <b class="font-semibold">50 000 кликов</b> в месяц, далее 99 ₽ за каждые 10 000</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Многоуровневые программы и несколько программ параллельно</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Кабинет партнёра на вашем домене (white-label)</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Экспорт отчётов, выгрузки по API, до 5 сотрудников в кабинете</span></li>
+          <li class="flex gap-3"><svg class="mt-0.5 h-[1.125rem] w-[1.125rem] flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Приоритетная поддержка в Telegram</span></li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="mx-auto mt-8 max-w-[56rem] text-center text-[0.875rem] text-muted">Клики считаются по уникальным переходам за календарный месяц. Конверсии, выплаты и партнёры отдельно не тарифицируются. Нужны индивидуальные условия или договор на юрлицо? <button class="font-medium text-ink underline" data-open-modal="demo">Напишите нам</button>.</p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="py-16 sm:py-24">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+    <div class="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
+      <div>
+        <h2 class="h-section h-sm text-ink">У вас наверняка есть вопросы</h2>
+        <p class="mt-4 text-[1.125rem] text-body">Не нашли ответ? Напишите нам — отвечаем в рабочие часы за 15 минут.</p>
+        <button class="btn btn-outline mt-6" data-open-modal="demo">Задать вопрос</button>
+      </div>
+      <div>
+        <details class="faq-item" open>
+          <summary class="faq-q">Партнёрка действительно бесплатна для стартапов?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="faq-a">Да. Тариф «Старт» бесплатен без ограничения по времени: полный функционал, до 2 партнёров и 1 000 кликов в месяц. Когда партнёры начнут приводить больше трафика, переходите на «Рост» за 999 ₽ в месяц: партнёры без ограничений и до 50 000 кликов.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Сколько времени занимает интеграция?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="faq-a">Для сайта на любой CMS достаточно вставить один скрипт — это 10 минут. Для Telegram-бота, Bitrix24, n8n и своих бэкендов есть готовые сценарии, Webhooks и REST API. Конверсии можно передавать событием с сервера, чтобы не зависеть от браузера пользователя.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Какие типы программ и вознаграждений поддерживаются?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="faq-a">Реферальные, партнёрские и амбассадорские программы, в том числе многоуровневые. Вознаграждение — фикс-ставка, процент от чека или revshare с ежемесячным начислением, пока клиент платит. Условия можно задавать отдельно для каждого партнёра или сегмента.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Как работает антифрод?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="faq-a">Каждая конверсия получает fraud-score от 0 до 1 на основе fingerprint устройства, IP, скорости прохождения воронки и истории партнёра. Мы подсвечиваем фейк-клики, мультиаккаунты и self-referrals, а решение — засчитать или отклонить — остаётся за вами. Порог автоматического отклонения настраивается.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Как проходят выплаты партнёрам?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="faq-a">Партнёр запрашивает выплату в своём кабинете, вы видите запрос, статус и общий баланс перед всеми партнёрами. Деньги вы переводите сами по реквизитам, а сервис формирует акты и учитывает выплаты в отчётах. Поддерживаются ИП, юрлица и самозанятые.</div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Соответствует ли сервис 152-ФЗ?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <div class="faq-a">Да. Данные хранятся и обрабатываются в дата-центрах на территории России, есть готовые тексты согласий и политики обработки персональных данных, а также шаблоны договоров с партнёрами, адаптированные под российское право.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="cta-gradient text-white">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8 py-24 sm:py-32 text-center">
+    <h2 class="h-section h-xl mx-auto max-w-[50rem]">Готовы запустить партнёрку?</h2>
+    <p class="mx-auto mt-5 max-w-[38.75rem] text-[1.125rem] sm:text-[1.25rem] text-white/80">Присоединяйтесь к 1 200+ компаниям, которые уже привлекают клиентов через партнёров. Первая программа — за 10 минут, бесплатно.</p>
+    <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <button class="btn btn-white w-full justify-center sm:w-auto !px-6 !py-4" data-open-modal="signup">Начать бесплатно <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="btn btn-outline-white w-full justify-center sm:w-auto !px-6 !py-4" data-open-modal="demo">Заказать демо</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-navy text-white">
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8 py-16">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+      <div>
+        <a href="#" class="flex items-center gap-2" aria-label="Партнёрка">
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-white"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="3" cy="8" r="2" fill="#fff"/></svg></span>
+          <span class="logo-word text-[1.375rem]">Партнёрка</span>
+        </a>
+        <p class="mt-4 max-w-[18.75rem] text-[0.875rem] leading-relaxed text-white/60">Сервис для запуска партнёрских, реферальных и амбассадорских программ. Сделано в России, для российского рынка.</p>
+        <div class="mt-5 flex items-center gap-2 text-[0.8125rem] text-white/60"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>Русский</div>
+      </div>
+      <div>
+        <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Платформа</div>
+        <ul class="space-y-2.5 text-[0.875rem] text-white/85">
+          <li><a href="#features" class="hover:text-white">Все возможности</a></li>
+          <li><a href="#g-connect" class="hover:text-white">Интеграции</a></li>
+          <li><a href="#g-analytics" class="hover:text-white">Аналитика</a></li>
+          <li><a href="#g-partners" class="hover:text-white">Кабинет партнёра</a></li>
+          <li><a href="#g-partners" class="hover:text-white">Антифрод</a></li>
+          <li><a href="#g-payouts" class="hover:text-white">Выплаты</a></li>
+          <li><a href="#" class="hover:text-white">API</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Решения</div>
+        <ul class="space-y-2.5 text-[0.875rem] text-white/85">
+          <li><a href="#solutions" class="hover:text-white">Для SaaS</a></li>
+          <li><a href="#solutions" class="hover:text-white">Для e-commerce</a></li>
+          <li><a href="#solutions" class="hover:text-white">Для онлайн-школ</a></li>
+          <li><a href="#" class="hover:text-white">Реферальные программы</a></li>
+          <li><a href="#" class="hover:text-white">Амбассадорские программы</a></li>
+          <li><a href="#" class="hover:text-white">Кэшбэк и промокоды</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Ресурсы</div>
+        <ul class="space-y-2.5 text-[0.875rem] text-white/85">
+          <li><a href="#pricing" class="hover:text-white">Тарифы</a></li>
+          <li><a href="#" class="hover:text-white">Документация</a></li>
+          <li><a href="#" class="hover:text-white">Шаблоны договоров</a></li>
+          <li><a href="#" class="hover:text-white">Кейсы</a></li>
+          <li><a href="#" class="hover:text-white">Блог</a></li>
+          <li><a href="#faq" class="hover:text-white">Центр помощи</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Компания</div>
+        <ul class="space-y-2.5 text-[0.875rem] text-white/85">
+          <li><a href="#" class="hover:text-white">О нас</a></li>
+          <li><a href="#" class="hover:text-white">Безопасность и 152-ФЗ</a></li>
+          <li><a href="#" class="hover:text-white">Вакансии</a></li>
+          <li><a href="#" class="hover:text-white">Контакты</a></li>
+          <li><a href="#" class="hover:text-white">Стать партнёром</a></li>
+          <li><a href="#" class="hover:text-white">Telegram-канал</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-[0.8125rem] text-white/50 md:flex-row md:items-center md:justify-between">
+      <div>© 2026 ООО «Партнёрка» · partnerka.io</div>
+      <div class="flex flex-wrap gap-x-6 gap-y-2">
+        <a href="#" class="hover:text-white">Политика конфиденциальности</a>
+        <a href="#" class="hover:text-white">Оферта</a>
+        <a href="#" class="hover:text-white">Обработка персональных данных</a>
+        <a href="#" class="hover:text-white">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-backdrop absolute inset-0" data-close-modal></div>
+  <div class="relative w-full max-w-[27.5rem] rounded-[1.5rem] bg-white p-7 sm:p-8 shadow-mock">
+    <button class="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-soft" data-close-modal aria-label="Закрыть"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#090B22" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg></button>
+
+    <div id="modal-form-wrap">
+      <div class="flex items-center gap-2"><span class="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-white"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="3" cy="8" r="2" fill="#fff"/></svg></span><span class="modal-brand text-[1.0625rem] text-ink">Партнёрка</span></div>
+      <h3 id="modal-title" class="h-card mt-5 text-ink">Создайте аккаунт</h3>
+      <p id="modal-sub" class="mt-2 text-[0.9375rem] text-body">Бесплатно, без банковской карты. Первая программа — за 10 минут.</p>
+
+      <form id="modal-form" class="mt-6 space-y-3" novalidate>
+        <div id="f-company" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Компания</label><input class="input" type="text" name="company" placeholder="ООО «Скайлайн»"></div>
+        <div><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Рабочий e-mail</label><input class="input" type="email" name="email" placeholder="you@company.ru" required></div>
+        <div id="f-password"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Пароль</label><input class="input" type="password" name="password" placeholder="Минимум 8 символов" minlength="8"></div>
+        <div id="f-phone" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Телефон</label><input class="input" type="tel" name="phone" placeholder="+7 (900) 000-00-00"></div>
+        <p id="modal-error" class="hidden text-[0.8125rem] text-red-600"></p>
+        <label id="f-consent" class="flex items-start gap-2.5 pt-1 text-[0.8125rem] text-body"><input type="checkbox" name="consent" class="mt-0.5 h-4 w-4 shrink-0 rounded border-line accent-brand"><span>Я принимаю <a href="#" class="underline text-ink">оферту</a> и даю <a href="#" class="underline text-ink">согласие на обработку персональных данных</a> (152-ФЗ)</span></label>
+        <button type="submit" class="btn btn-primary w-full justify-center !py-[0.875rem]" id="modal-submit">Создать аккаунт <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </form>
+      <p id="modal-switch" class="mt-5 text-center text-[0.8125rem] text-muted">Уже есть аккаунт? <button class="font-medium text-ink underline" data-open-modal="login">Войти</button></p>
+    </div>
+
+    <div id="modal-success" class="hidden text-center py-4">
+      <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>
+      <h3 class="h-card h-card-sm mt-5 text-ink" id="success-title">Аккаунт создан</h3>
+      <p class="mt-2 text-[0.9375rem] text-body" id="success-text">Это прототип: данные никуда не отправлены. В рабочей версии здесь будет переход в кабинет.</p>
+      <button class="btn btn-primary mt-6" data-close-modal>Отлично</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ---- header shadow on scroll
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('border-line', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  // ---- mobile menu
+  const burger = document.getElementById('burger'), mobile = document.getElementById('mobile-menu');
+  burger.addEventListener('click', () => { const open = mobile.classList.toggle('hidden'); burger.setAttribute('aria-expanded', String(!open)); });
+  mobile.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobile.classList.add('hidden')));
+
+  // ---- hero tabs
+  document.querySelectorAll('[data-hero]').forEach(btn => btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-hero]').forEach(b => b.classList.toggle('on', b === btn));
+    document.querySelectorAll('[data-panel]').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== btn.dataset.hero));
+  }));
+
+  // ---- features side nav: click scroll + scroll-spy
+  const links = [...document.querySelectorAll('#side-nav .side-link')];
+  const groups = links.map(l => document.getElementById(l.dataset.target));
+  const setActive = id => links.forEach(l => l.classList.toggle('active', l.dataset.target === id));
+  links.forEach(l => l.addEventListener('click', e => { e.preventDefault(); const t = document.getElementById(l.dataset.target); t.scrollIntoView({behavior:'smooth', block:'start'}); setActive(l.dataset.target); history.replaceState(null, '', '#' + l.dataset.target); }));
+  let ticking = false;
+  const spy = () => {
+    ticking = false;
+    const line = window.innerHeight * 0.35;
+    let current = groups[0].id;
+    for (const g of groups) { if (g.getBoundingClientRect().top <= line) current = g.id; }
+    setActive(current);
+  };
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(spy); } }, {passive:true});
+  spy();
+
+  // ---- fade-in on view
+  const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), {threshold: .05, rootMargin: "0px 0px -5% 0px"});
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  // ---- marquee: duplicate track content for seamless loop
+  const track = document.getElementById('marquee-track');
+  track.innerHTML += track.innerHTML;
+
+  // ---- pricing billing toggle
+  document.querySelectorAll('[data-billing]').forEach(btn => btn.addEventListener('click', () => {
+    const mode = btn.dataset.billing;
+    document.querySelectorAll('[data-billing]').forEach(b => { b.classList.toggle('on', b === btn); b.setAttribute('aria-selected', String(b === btn)); });
+    document.querySelectorAll('[data-price], [data-price-note]').forEach(el => el.textContent = el.dataset[mode]);
+  }));
+
+  // ---- modal
+  const modal = document.getElementById('modal');
+  const formWrap = document.getElementById('modal-form-wrap'), success = document.getElementById('modal-success');
+  const form = document.getElementById('modal-form'), err = document.getElementById('modal-error');
+  const title = document.getElementById('modal-title'), sub = document.getElementById('modal-sub'), submit = document.getElementById('modal-submit'), sw = document.getElementById('modal-switch');
+  const fCompany = document.getElementById('f-company'), fPass = document.getElementById('f-password'), fPhone = document.getElementById('f-phone'), fConsent = document.getElementById('f-consent');
+  let mode = 'signup', lastFocus = null;
+  const variants = {
+    signup: { title: 'Создайте аккаунт', sub: 'Бесплатно, без банковской карты. Первая программа — за 10 минут.', btn: 'Создать аккаунт', company:false, pass:true, phone:false, consent:true, sw:'Уже есть аккаунт? <button class="font-medium text-ink underline" data-open-modal="login">Войти</button>', ok:'Аккаунт создан' },
+    login:  { title: 'Вход в кабинет', sub: 'Введите e-mail и пароль от вашего аккаунта.', btn: 'Войти', company:false, pass:true, phone:false, consent:false, sw:'Нет аккаунта? <button class="font-medium text-ink underline" data-open-modal="signup">Начать бесплатно</button>', ok:'Добро пожаловать' },
+    demo:   { title: 'Заказать демо', sub: 'Покажем платформу на вашем кейсе и ответим на вопросы. 30 минут.', btn: 'Отправить заявку', company:true, pass:false, phone:true, consent:true, sw:'', ok:'Заявка отправлена' },
+  };
+  function applyMode(m){
+    mode = m; const v = variants[m];
+    title.textContent = v.title; sub.textContent = v.sub;
+    submit.firstChild.textContent = v.btn + ' ';
+    fCompany.classList.toggle('hidden', !v.company); fPass.classList.toggle('hidden', !v.pass); fPhone.classList.toggle('hidden', !v.phone); fConsent.classList.toggle('hidden', !v.consent);
+    sw.innerHTML = v.sw; sw.classList.toggle('hidden', !v.sw);
+    err.classList.add('hidden'); form.reset();
+    formWrap.classList.remove('hidden'); success.classList.add('hidden');
+  }
+  function openModal(m){
+    lastFocus = document.activeElement;
+    applyMode(m);
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    mobile.classList.add('hidden');
+    setTimeout(() => form.querySelector('input:not([type=hidden]):not(.hidden input)') && (form.querySelector('[name=email]')).focus(), 30);
+  }
+  function closeModal(){
+    modal.classList.add('hidden'); modal.classList.remove('flex');
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  document.addEventListener('click', e => {
+    const o = e.target.closest('[data-open-modal]'); if (o) { e.preventDefault(); openModal(o.dataset.openModal); return; }
+    if (e.target.closest('[data-close-modal]')) closeModal();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const v = variants[mode]; const fd = new FormData(form);
+    const email = (fd.get('email') || '').trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('Укажите корректный e-mail.');
+    if (v.pass && (fd.get('password') || '').length < 8) return showErr('Пароль должен быть не короче 8 символов.');
+    if (v.phone && !(fd.get('phone') || '').trim()) return showErr('Укажите телефон, чтобы мы могли связаться.');
+    if (v.consent && !fd.get('consent')) return showErr('Нужно принять оферту и согласие на обработку данных.');
+    err.classList.add('hidden');
+    document.getElementById('success-title').textContent = v.ok;
+    formWrap.classList.add('hidden'); success.classList.remove('hidden');
+  });
+  function showErr(t){ err.textContent = t; err.classList.remove('hidden'); }
+})();
+</script>
+</body>
+</html>
