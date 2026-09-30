@@ -79,6 +79,7 @@ tailwind.config = {
   .side-link.active .side-arrow { opacity: 1; transform: translateX(0); }
   .side-link:hover { color: #090B22; }
   .feature-group { scroll-margin-top: 7rem; }
+  section[id] { scroll-margin-top: 4.5rem; }
   /* marquee */
   .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
   .marquee-track { display: flex; gap: 4.5rem; width: max-content; animation: marquee 38s linear infinite; }
@@ -125,11 +126,10 @@ tailwind.config = {
       </a>
 
       <nav class="hidden lg:flex items-center gap-1" aria-label="Основное меню">
-        <a href="#features" class="nav-link">Платформа <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
-        <a href="#solutions" class="nav-link">Решения <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
-        <a href="#faq" class="nav-link">Ресурсы <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        <a href="#features" class="nav-link">Возможности</a>
+        <a href="#solutions" class="nav-link">Кому подходит?</a>
         <a href="#pricing" class="nav-link">Тарифы</a>
-        <a href="#solutions" class="nav-link">Для бизнеса</a>
+        <a href="#faq" class="nav-link">FAQ</a>
       </nav>
 
       <div class="hidden lg:flex items-center gap-1">
@@ -149,11 +149,10 @@ tailwind.config = {
   </div>
   <div id="mobile-menu" class="lg:hidden hidden border-t border-line bg-white">
     <div class="px-5 py-4 flex flex-col gap-1">
-      <a href="#features" class="nav-link">Платформа</a>
-      <a href="#solutions" class="nav-link">Решения</a>
-      <a href="#faq" class="nav-link">Ресурсы</a>
+      <a href="#features" class="nav-link">Возможности</a>
+      <a href="#solutions" class="nav-link">Кому подходит?</a>
       <a href="#pricing" class="nav-link">Тарифы</a>
-      <a href="#solutions" class="nav-link">Для бизнеса</a>
+      <a href="#faq" class="nav-link">FAQ</a>
       <div class="mt-3 flex flex-col gap-2">
         <button class="btn btn-outline justify-center" data-open-modal="login">Войти</button>
         <button class="btn btn-primary justify-center" data-open-modal="signup">Начать бесплатно</button>
