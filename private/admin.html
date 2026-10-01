@@ -91,6 +91,19 @@
   .utm { font-size: .75rem; color: var(--muted); word-break: break-all; max-width: 14rem; }
   .utm b { color: var(--body); font-weight: 500; }
 
+  .status { display: grid; gap: .5rem; margin-top: 1rem; }
+  @media (min-width: 768px) { .status { grid-template-columns: 1fr 1fr; } }
+  .st { display: flex; align-items: flex-start; gap: .625rem; padding: .75rem .875rem; border-radius: .875rem; border: 1px solid var(--line); background: var(--card); font-size: .8125rem; }
+  .st .dot { flex: none; width: .5rem; height: .5rem; margin-top: .4rem; border-radius: 50%; background: var(--green); }
+  .st.bad { border-color: #FECACA; background: #FEF2F2; }
+  .st.bad .dot { background: var(--red); }
+  .st.unk .dot { background: #A1A1AA; }
+  .st b { display: block; color: var(--ink); font-weight: 600; }
+  .st p { margin: .125rem 0 0; color: var(--muted); }
+  .st .btn { height: 2rem; margin-left: auto; font-size: .8125rem; }
+  .st .res { margin-top: .375rem; }
+  .st .res.ok { color: var(--green); }
+  .st .res.err { color: var(--red); word-break: break-word; }
   .empty { padding: 3.5rem 1rem; text-align: center; color: var(--muted); }
   .empty b { display: block; color: var(--ink); font-size: 1rem; font-weight: 600; margin-bottom: .25rem; }
   .foot { margin: .75rem 0 2.5rem; font-size: .75rem; color: var(--muted); }
@@ -135,6 +148,7 @@
   <main class="wrap">
     <h1>Лиды</h1>
     <p class="sub" id="updated">Загрузка…</p>
+    <div class="status" id="status"></div>
 
     <div class="tabs" role="group" aria-label="Тип лида" id="tabs"></div>
 
@@ -202,7 +216,38 @@
     Object.assign(state, r.data);
     const c = r.data.counts || {};
     $('updated').textContent = `Обновлено в ${fmtT.format(new Date())} · в базе аккаунтов: ${c.users ?? '—'}, заявок: ${c.leads ?? '—'}`;
+    renderStatus(r.data.system || {});
     show('app'); render();
+  }
+
+  // плашки самодиагностики: хранилище базы и Mattermost
+  function renderStatus(s) {
+    const storage = {
+      persistent: ['', 'База на постоянном томе', `Папка ${s.dataDir} подключена как том, лиды сохраняются между деплоями.`],
+      container: ['bad', 'База пропадёт при следующем деплое', `Папка ${s.dataDir} не подключена как постоянный том. В Coolify откройте приложение → Persistent Storage → добавьте том с путём ${s.dataDir} и нажмите Redeploy.`],
+      anonymous: ['bad', 'База пропадёт при следующем деплое', `Папка ${s.dataDir} лежит в безымянном томе Docker, при каждом деплое создаётся новый. В Coolify откройте приложение → Persistent Storage → добавьте том с путём ${s.dataDir} и нажмите Redeploy.`],
+      unknown: ['unk', 'Хранилище не проверено', 'Проверка работает только на сервере в Docker.'],
+    }[s.storage] || ['unk', 'Хранилище не проверено', ''];
+    const started = s.startedAt ? new Date(s.startedAt) : null;
+    const details = [s.volume ? `Том: ${s.volume}` : null, s.dbFile ? `Файл базы: ${s.dbFile}` : null,
+      started ? `Сервер запущен ${fmt.format(started)} в ${fmtT.format(started)}` : null].filter(Boolean).join(' · ');
+    const st1 = h('div', { className: `st ${storage[0]}` }, h('span', { className: 'dot' }),
+      h('div', { style: 'min-width:0' }, h('b', {}, storage[1]), h('p', {}, storage[2]), details ? h('p', { style: 'word-break:break-all' }, details) : null));
+    const res = h('div', { className: 'res' });
+    const btn = h('button', { type: 'button', className: 'btn' }, 'Отправить тест');
+    btn.addEventListener('click', async () => {
+      btn.disabled = true; res.className = 'res'; res.textContent = 'Отправляю…';
+      try {
+        const r = await api('/api/admin/mattermost-test', {});
+        res.className = `res ${r.data.ok ? 'ok' : 'err'}`;
+        res.textContent = r.data.ok ? 'Готово, проверьте канал в Mattermost.' : (r.data.error || 'Не получилось.');
+      } catch { res.className = 'res err'; res.textContent = 'Нет связи с сервером.'; } finally { btn.disabled = false; }
+    });
+    const st2 = h('div', { className: `st ${s.mattermost ? '' : 'bad'}` }, h('span', { className: 'dot' }),
+      h('div', { style: 'min-width:0' }, h('b', {}, s.mattermost ? 'Mattermost подключён' : 'Mattermost не подключён'),
+        h('p', {}, s.mattermost ? 'Новые лиды уходят в канал. Проверьте связь тестовым сообщением.' : 'Переменная MATTERMOST_WEBHOOK_URL не задана. Добавьте её в Coolify и нажмите Redeploy.'), res),
+      s.mattermost ? btn : null);
+    $('status').replaceChildren(st1, st2);
   }
 
   const filtered = () => {

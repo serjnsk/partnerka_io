@@ -6,7 +6,7 @@
 import express from 'express';
 import { DatabaseSync } from 'node:sqlite';
 import { scryptSync, randomBytes, timingSafeEqual, createHash } from 'node:crypto';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -300,7 +300,44 @@ app.post('/api/admin/logout', (req, res) => {
   res.clearCookie(ADMIN_COOKIE, { path: '/' }); res.json({ ok: true });
 });
 app.use('/api/admin', (req, res, next) => (ADMIN_PASSWORD && isAdmin(req) ? next() : fail(res, ADMIN_PASSWORD ? 401 : 404, ADMIN_PASSWORD ? 'Нужно войти.' : 'Не найдено')));
-app.get('/api/admin/leads', (req, res) => res.json({ leads: leadRows(), counts: q.counts.get(), kinds: KINDS, plans: PLANS, channels: CHANNELS }));
+// Самодиагностика для админки: где лежит база и настроен ли Mattermost.
+// Хранилище определяем по /proc/self/mountinfo: нет отдельного тома на DATA_DIR — база внутри контейнера;
+// том с именем из 64 hex-символов — безымянный том Docker, новый на каждый деплой. В обоих случаях данные пропадают при деплое.
+const STARTED_AT = new Date().toISOString();
+// Возвращает { state, volume }: volume — имя тома Docker или путь на сервере, чтобы сверить с Coolify → Persistent Storage.
+function storageInfo() {
+  let lines;
+  try { lines = readFileSync('/proc/self/mountinfo', 'utf8').split('\n'); } catch { return { state: 'unknown', volume: null }; }
+  const dir = path.resolve(DATA_DIR);
+  const m = lines.map(l => l.split(' ')).find(f => f[4] === dir);
+  if (!m) return { state: 'container', volume: null };
+  const vol = m[3].match(/\/volumes\/([^/]+)\/_data$/);
+  return { state: vol && /^[0-9a-f]{64}$/.test(vol[1]) ? 'anonymous' : 'persistent', volume: vol ? vol[1] : m[3] };
+}
+const storageState = () => storageInfo().state;
+const DB_FILE = path.join(path.resolve(DATA_DIR), 'partnerka.db');
+const systemInfo = () => { const s = storageInfo(); return { storage: s.state, volume: s.volume, dataDir: DATA_DIR, dbFile: DB_FILE, mattermost: Boolean(MM_WEBHOOK), startedAt: STARTED_AT }; };
+
+app.get('/api/admin/leads', (req, res) => res.json({ leads: leadRows(), counts: q.counts.get(), system: systemInfo(), kinds: KINDS, plans: PLANS, channels: CHANNELS }));
+// тестовое сообщение в Mattermost: показывает в админке точный ответ или ошибку
+app.post('/api/admin/mattermost-test', async (req, res) => {
+  if (!MM_WEBHOOK) return res.json({ ok: false, error: 'Переменная MATTERMOST_WEBHOOK_URL не задана. Добавьте её в Coolify и пересоберите приложение.' });
+  if (limited(`mmtest:${req.ip}`, 10, 600_000)) return fail(res, 429, 'Слишком много тестов. Подождите несколько минут.');
+  let host = ''; try { host = new URL(MM_WEBHOOK).host; } catch { return res.json({ ok: false, error: 'MATTERMOST_WEBHOOK_URL — не ссылка. Скопируйте адрес вебхука целиком, начиная с https://' }); }
+  try {
+    const r = await fetch(MM_WEBHOOK, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(8000),
+      body: JSON.stringify({ username: 'partnerka.io', icon_url: `${SITE_URL}/logo/v4-ssylka-telegram-dark.png`, text: `#### ✅ Проверка связи\nВебхук работает, сюда будут приходить лиды с сайта.\n\nВсе лиды — в админке: [${SITE_URL.replace(/^https?:\/\//, '')}/admin](${SITE_URL}/admin)` }),
+    });
+    const body = (await r.text()).slice(0, 300);
+    if (r.ok) return res.json({ ok: true, host });
+    console.error('[mattermost test]', r.status, body);
+    res.json({ ok: false, host, error: `Mattermost ответил ${r.status}: ${body || 'без текста'}` });
+  } catch (e) {
+    console.error('[mattermost test]', e.message);
+    res.json({ ok: false, host, error: `Не удалось достучаться до ${host}: ${e.cause?.code || e.name === 'TimeoutError' ? (e.cause?.code || 'нет ответа за 8 секунд') : e.message}` });
+  }
+});
 app.get('/api/admin/leads.csv', (req, res) => {
   const leads = filterLeads(leadRows(), req.query.kind, req.query.q);
   const head = ['ID', 'Дата (МСК)', 'Тип', 'Продукт', 'Мессенджер', 'Контакт', 'E-mail', 'Тариф', 'Компания', 'Телефон', 'Сообщение', ...UTM_KEYS, 'Отправлено в Mattermost'];
@@ -326,4 +363,9 @@ app.use((err, req, res, next) => {
   res.status(err?.status && err.status < 500 ? err.status : 500).json({ error: 'Что-то пошло не так. Попробуйте ещё раз.' });
 });
 
-app.listen(PORT, () => console.log(`partnerka.io слушает :${PORT} (${IS_PROD ? 'production' : 'development'}), Mattermost: ${MM_WEBHOOK ? 'настроен' : 'нет, сообщения в логах'}`));
+app.listen(PORT, () => {
+  console.log(`partnerka.io слушает :${PORT} (${IS_PROD ? 'production' : 'development'}), Mattermost: ${MM_WEBHOOK ? 'настроен' : 'нет, сообщения в логах'}`);
+  const st = storageState(), si = storageInfo();
+  console.log(`[db] база: ${DB_FILE}; том: ${si.volume || 'нет'} (${si.state}); аккаунтов: ${q.counts.get().users}, заявок: ${q.counts.get().leads}`);
+  if (st === 'container' || st === 'anonymous') console.warn(`[warn] ${DATA_DIR} не на постоянном томе: база пропадёт при следующем деплое. В Coolify добавьте Persistent Storage с путём ${DATA_DIR}.`);
+});
