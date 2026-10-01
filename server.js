@@ -138,12 +138,6 @@ const md = s => esc(s).replace(/[\\`*_{}\[\]()<>#+!~|]/g, '\\$&').replace(/(^|[\
 // ссылки на Telegram и MAX после нормализации делаем кликабельными, остальное — просто текст
 const mdContact = v => (/^https:\/\/(t\.me|max\.ru|web\.max\.ru)\/[\w./@-]+$/i.test(v || '') ? `[${md(v.replace(/^https:\/\//, ''))}](${v})` : md(v));
 const mskNow = () => new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow', dateStyle: 'short', timeStyle: 'short' }).format(new Date()).replace(',', '') + ' МСК';
-const UTM_LABELS = { utm_source: 'utm_source', utm_medium: 'utm_medium', utm_campaign: 'utm_campaign', utm_content: 'utm_content', utm_term: 'utm_term', seg: 'Сегмент (seg)', ref: 'ref' };
-const utmRows = utm => {
-  let u = {}; try { u = JSON.parse(utm || '{}') || {}; } catch {}
-  const rows = Object.keys(UTM_LABELS).filter(k => u[k]).map(k => [UTM_LABELS[k], md(u[k])]);
-  return rows.length ? rows : [['Источник', 'прямой заход']];
-};
 
 // rows: [подпись, уже подготовленное значение]; quote — длинный текст обращения, идёт цитатой под таблицей
 async function notifyMattermost(leadId, title, rows, quote) {
@@ -223,7 +217,7 @@ app.post('/api/signup', async (req, res) => {
   // не ждём Mattermost: посетитель сразу попадает в кабинет, отметка о доставке обновится сама
   notifyMattermost(leadId, existing ? '🟢 Новая регистрация (аккаунт с прошлой версии сайта)' : '🟢 Новая регистрация', [
     ['Продукт', md(product)], [CHANNELS[channel], mdContact(contact)], ['E-mail', md(email)], ['Тариф', PLANS[planKey]],
-    ...utmRows(utmJson), ['Время', mskNow()],
+    ['Время', mskNow()],
   ]);
   res.json({ ok: true, redirect: '/app' });
 });
@@ -259,7 +253,7 @@ app.post('/api/request', async (req, res) => {
   const lead = q.insertLead.run(type, null, email, null, null, null, clip(company, 120), clip(phone, 40), clip(message, 2000), null, cleanUtm(utm));
   notifyMattermost(Number(lead.lastInsertRowid), type === 'demo' ? '📝 Заявка «Подобрать решение»' : '💬 Вопрос в поддержку', [
     ['E-mail', md(email)], ['Компания', md(clip(company, 120))], ['Телефон', md(clip(phone, 40))],
-    ...utmRows(cleanUtm(utm)), ['Время', mskNow()],
+    ['Время', mskNow()],
   ], clip(message, 2000));
   res.json({ ok: true });
 });
