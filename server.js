@@ -16,6 +16,8 @@ const PORT = Number(env.PORT || 3000);
 const IS_PROD = env.NODE_ENV === 'production';
 const DATA_DIR = env.DATA_DIR || path.join(__dirname, 'data');
 const MM_WEBHOOK = env.MATTERMOST_WEBHOOK_URL || '';
+// адрес сайта для ссылок в уведомлениях (ссылка на админку)
+const SITE_URL = (env.SITE_URL || (IS_PROD ? 'https://partnerka.io' : `http://localhost:${PORT}`)).replace(/\/+$/, '');
 const ADMIN_PASSWORD = env.ADMIN_PASSWORD || '';
 const ADMIN_DAYS = 7;
 const SESSION_DAYS = 30;
@@ -67,13 +69,22 @@ const q = {
   userByEmail: db.prepare('SELECT * FROM users WHERE email = ?'),
   userById: db.prepare('SELECT * FROM users WHERE id = ?'),
   insertUser: db.prepare('INSERT INTO users (email, password_hash, plan, channel, contact, product, utm) VALUES (?, ?, ?, ?, ?, ?, ?)'),
+  completeUser: db.prepare('UPDATE users SET password_hash = ?, plan = ?, channel = ?, contact = ?, product = ?, utm = COALESCE(?, utm) WHERE id = ?'),
   insertSession: db.prepare('INSERT INTO sessions (token_hash, user_id, expires_at) VALUES (?, ?, ?)'),
   session: db.prepare('SELECT user_id FROM sessions WHERE token_hash = ? AND expires_at > ?'),
   deleteSession: db.prepare('DELETE FROM sessions WHERE token_hash = ?'),
   purgeSessions: db.prepare('DELETE FROM sessions WHERE expires_at <= ?'),
   insertLead: db.prepare('INSERT INTO leads (kind, user_id, email, channel, contact, product, company, phone, message, plan, utm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'),
   markDelivered: db.prepare('UPDATE leads SET delivered = 1 WHERE id = ?'),
-  allLeads: db.prepare('SELECT id, kind, email, channel, contact, product, company, phone, message, plan, utm, delivered, created_at FROM leads ORDER BY id DESC'),
+  // Лиды плюс аккаунты, у которых лида нет (прошлая версия писала лид только после ввода кода из письма).
+  // Такие аккаунты идут с типом account и id вида «u12»; в Mattermost они не отправлялись, пометка об этом не нужна.
+  allLeads: db.prepare(`
+    SELECT CAST(id AS TEXT) AS id, kind, email, channel, contact, product, company, phone, message, plan, utm, delivered, created_at FROM leads
+    UNION ALL
+    SELECT 'u' || u.id, 'account', u.email, u.channel, u.contact, u.product, NULL, NULL, NULL, u.plan, u.utm, 1, u.created_at FROM users u
+    WHERE NOT EXISTS (SELECT 1 FROM leads l WHERE l.user_id = u.id)
+    ORDER BY created_at DESC, id DESC`),
+  counts: db.prepare('SELECT (SELECT count(*) FROM users) AS users, (SELECT count(*) FROM leads) AS leads'),
   insertAdminSession: db.prepare('INSERT INTO admin_sessions (token_hash, pw_tag, expires_at) VALUES (?, ?, ?)'),
   adminSession: db.prepare('SELECT 1 FROM admin_sessions WHERE token_hash = ? AND pw_tag = ? AND expires_at > ?'),
   deleteAdminSession: db.prepare('DELETE FROM admin_sessions WHERE token_hash = ?'),
@@ -98,18 +109,16 @@ const cleanUtm = u => {
   for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'seg', 'ref']) if (u[k]) out[k] = clip(u[k], 120);
   return Object.keys(out).length ? JSON.stringify(out) : null;
 };
-// контакт приводим к единому виду: ник Telegram → https://t.me/ник, номер оставляем как есть.
-// Возвращает null, если формат не распознан.
-const PHONE_RE = /^\+?[\d\s()-]{10,20}$/;
+// Контакт принимаем в любом виде, формат не проверяем.
+// Ник или ссылку Telegram приводим к https://t.me/ник, чтобы менеджер открыл чат в один клик; остальное сохраняем как ввели.
 function normalizeContact(channel, raw) {
   const v = String(raw || '').trim();
-  if (PHONE_RE.test(v) && v.replace(/\D/g, '').length >= 10) return v;
   if (channel === 'telegram') {
-    const m = v.match(/^(?:https?:\/\/)?(?:www\.)?(?:t\.me|telegram\.me)\/@?([a-zA-Z0-9_]{5,32})\/?$/i) || v.match(/^@?([a-zA-Z0-9_]{5,32})$/);
-    return m ? `https://t.me/${m[1]}` : null;
+    const m = v.match(/^(?:https?:\/\/)?(?:www\.)?(?:t\.me|telegram\.me)\/@?([a-zA-Z0-9_]{5,32})\/?$/i) || v.match(/^@([a-zA-Z0-9_]{5,32})$/) || v.match(/^([a-zA-Z][a-zA-Z0-9_]{4,31})$/);
+    if (m) return `https://t.me/${m[1]}`;
   }
-  if (/^(?:https?:\/\/)?(?:web\.)?max\.ru\/\S{2,200}$/i.test(v)) return v.startsWith('http') ? v : `https://${v}`;
-  return /^@?[a-zA-Z0-9_.]{3,32}$/.test(v) ? v : null;
+  if (/^(?:web\.)?max\.ru\/\S+$/i.test(v)) return `https://${v}`;
+  return v;
 }
 const esc = s => String(s ?? '').replace(/[|\n\r]/g, ' ').trim();
 
@@ -123,16 +132,33 @@ const limited = (key, max, windowMs) => {
 setInterval(() => { const now = Date.now(); for (const [k, v] of hits) if (!v.some(t => now - t < 3600_000)) hits.delete(k); q.purgeSessions.run(now); q.purgeAdminSessions.run(now); }, 600_000).unref();
 
 // ---------- Mattermost ----------
-async function notifyMattermost(leadId, title, rows) {
-  const table = ['| | |', '|:--|:--|', ...rows.filter(([, v]) => v).map(([k, v]) => `| ${k} | ${esc(v)} |`)].join('\n');
-  const text = `#### ${title}\n${table}`;
+// Всё, что ввёл посетитель, экранируем: иначе он мог бы подсунуть в канал свою ссылку или разметку.
+// «@» в начале слова разбиваем невидимым пробелом, чтобы текст вроде @channel или @all не будил весь канал.
+const md = s => esc(s).replace(/[\\`*_{}\[\]()<>#+!~|]/g, '\\$&').replace(/(^|[\s(\[])@/g, '$1@\u200b');
+// ссылки на Telegram и MAX после нормализации делаем кликабельными, остальное — просто текст
+const mdContact = v => (/^https:\/\/(t\.me|max\.ru|web\.max\.ru)\/[\w./@-]+$/i.test(v || '') ? `[${md(v.replace(/^https:\/\//, ''))}](${v})` : md(v));
+const mskNow = () => new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow', dateStyle: 'short', timeStyle: 'short' }).format(new Date()).replace(',', '') + ' МСК';
+const UTM_LABELS = { utm_source: 'utm_source', utm_medium: 'utm_medium', utm_campaign: 'utm_campaign', utm_content: 'utm_content', utm_term: 'utm_term', seg: 'Сегмент (seg)', ref: 'ref' };
+const utmRows = utm => {
+  let u = {}; try { u = JSON.parse(utm || '{}') || {}; } catch {}
+  const rows = Object.keys(UTM_LABELS).filter(k => u[k]).map(k => [UTM_LABELS[k], md(u[k])]);
+  return rows.length ? rows : [['Источник', 'прямой заход']];
+};
+
+// rows: [подпись, уже подготовленное значение]; quote — длинный текст обращения, идёт цитатой под таблицей
+async function notifyMattermost(leadId, title, rows, quote) {
+  const table = ['| | |', '|:--|:--|', ...rows.filter(([, v]) => v).map(([k, v]) => `| ${k} | ${v} |`)].join('\n');
+  const body = quote ? `\n\n${String(quote).trim().split(/\r?\n/).map(l => `> ${md(l) || ' '}`).join('\n')}` : '';
+  const text = `#### ${title}\n${table}${body}\n\nВсе лиды и выгрузка в CSV — в админке: [${SITE_URL.replace(/^https?:\/\//, '')}/admin](${SITE_URL}/admin)`;
   if (!MM_WEBHOOK) { console.log('[dev] mattermost:\n' + text); return; }
   try {
-    const r = await fetch(MM_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: 'partnerka.io', text }) });
-    if (r.ok) q.markDelivered.run(leadId); else console.error('[mattermost]', r.status, await r.text());
+    const r = await fetch(MM_WEBHOOK, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(8000),
+      body: JSON.stringify({ username: 'partnerka.io', icon_url: `${SITE_URL}/logo/v4-ssylka-telegram-dark.png`, text }),
+    });
+    if (r.ok) q.markDelivered.run(leadId); else console.error('[mattermost]', r.status, (await r.text()).slice(0, 300));
   } catch (e) { console.error('[mattermost]', e.message); }
 }
-const utmRow = utm => { try { const u = JSON.parse(utm || '{}'); return Object.entries(u).map(([k, v]) => `${k}=${v}`).join(', '); } catch { return ''; } };
 
 // ---------- сессии ----------
 const COOKIE = 'pk_session';
@@ -173,17 +199,31 @@ app.post('/api/signup', async (req, res) => {
   if (typeof password !== 'string' || password.length < 8 || password.length > 200) return fail(res, 400, 'Пароль должен быть не короче 8 символов.');
   if (!CHANNELS[channel] || !clip(rawContact)) return fail(res, 400, 'Укажите контакт в Telegram или MAX.');
   const contact = normalizeContact(channel, clip(rawContact, 220));
-  if (!contact) return fail(res, 400, channel === 'telegram' ? 'Укажите ссылку на профиль вида https://t.me/username, @username или номер телефона.' : 'Укажите номер телефона, к которому привязан аккаунт в MAX.');
   if (!product || product.length < 2) return fail(res, 400, 'Укажите название продукта.');
   if (!consent) return fail(res, 400, 'Нужно дать согласие на обработку персональных данных.');
-  if (q.userByEmail.get(email)) return fail(res, 409, 'Аккаунт с этой почтой уже есть. Войдите.', { code: 'exists' });
+  // Аккаунт без контакта остался от прошлой версии: в нём ничего нет, поэтому разрешаем дозаполнить его регистрацией.
+  const existing = q.userByEmail.get(email);
+  if (existing?.contact) return fail(res, 409, 'Аккаунт с этой почтой уже есть. Войдите.', { code: 'exists' });
   const planKey = PLANS[plan] ? plan : 'plus', utmJson = cleanUtm(utm);
-  const user = q.insertUser.run(email, hashPassword(password), planKey, channel, contact, product, utmJson);
-  const userId = Number(user.lastInsertRowid);
+  // аккаунт и лид пишем одной транзакцией: либо сохраняется всё, либо ничего
+  let userId, leadId;
+  const passwordHash = hashPassword(password);
+  db.exec('BEGIN');
+  try {
+    if (existing) { q.completeUser.run(passwordHash, planKey, channel, contact, product, utmJson, existing.id); userId = existing.id; }
+    else userId = Number(q.insertUser.run(email, passwordHash, planKey, channel, contact, product, utmJson).lastInsertRowid);
+    leadId = Number(q.insertLead.run('signup', userId, email, channel, contact, product, null, null, null, planKey, utmJson).lastInsertRowid);
+    db.exec('COMMIT');
+  } catch (e) {
+    db.exec('ROLLBACK');
+    console.error('[signup]', email, e.message);
+    return fail(res, 500, 'Не удалось сохранить регистрацию. Попробуйте ещё раз через минуту.');
+  }
   startSession(res, userId);
-  const lead = q.insertLead.run('signup', userId, email, channel, contact, product, null, null, null, planKey, utmJson);
-  await notifyMattermost(Number(lead.lastInsertRowid), '🟢 Новая регистрация', [
-    ['Продукт', product], [CHANNELS[channel], contact], ['E-mail', email], ['Тариф', PLANS[planKey]], ['Источник', utmRow(utmJson)],
+  // не ждём Mattermost: посетитель сразу попадает в кабинет, отметка о доставке обновится сама
+  notifyMattermost(leadId, existing ? '🟢 Новая регистрация (аккаунт с прошлой версии сайта)' : '🟢 Новая регистрация', [
+    ['Продукт', md(product)], [CHANNELS[channel], mdContact(contact)], ['E-mail', md(email)], ['Тариф', PLANS[planKey]],
+    ...utmRows(utmJson), ['Время', mskNow()],
   ]);
   res.json({ ok: true, redirect: '/app' });
 });
@@ -217,9 +257,10 @@ app.post('/api/request', async (req, res) => {
   if (type === 'support' && !clip(message)) return fail(res, 400, 'Напишите пару слов о вашем проекте.');
   if (type === 'demo' && !clip(phone, 40)) return fail(res, 400, 'Укажите телефон, чтобы мы могли связаться.');
   const lead = q.insertLead.run(type, null, email, null, null, null, clip(company, 120), clip(phone, 40), clip(message, 2000), null, cleanUtm(utm));
-  await notifyMattermost(Number(lead.lastInsertRowid), type === 'demo' ? '📝 Заявка «Подобрать решение»' : '💬 Вопрос в поддержку', [
-    ['E-mail', email], ['Компания', clip(company, 120)], ['Телефон', clip(phone, 40)], ['Сообщение', clip(message, 2000)], ['Источник', utmRow(cleanUtm(utm))],
-  ]);
+  notifyMattermost(Number(lead.lastInsertRowid), type === 'demo' ? '📝 Заявка «Подобрать решение»' : '💬 Вопрос в поддержку', [
+    ['E-mail', md(email)], ['Компания', md(clip(company, 120))], ['Телефон', md(clip(phone, 40))],
+    ...utmRows(cleanUtm(utm)), ['Время', mskNow()],
+  ], clip(message, 2000));
   res.json({ ok: true });
 });
 
@@ -231,8 +272,8 @@ const ADMIN_COOKIE = 'pk_admin';
 const ADMIN_PW_TAG = ADMIN_PASSWORD ? sha256(`admin:${ADMIN_PASSWORD}`).slice(0, 16) : '';
 const isAdmin = req => { const t = readCookie(req, ADMIN_COOKIE); return Boolean(ADMIN_PASSWORD && t && q.adminSession.get(sha256(t), ADMIN_PW_TAG, Date.now())); };
 // contact — строки прошлой версии: тогда контакт и продукт приходили отдельно после подтверждения почты
-const KINDS = { signup: 'Регистрация', contact: 'Регистрация: контакт', support: 'Поддержка', demo: 'Подобрать решение' };
-const KIND_GROUPS = { signup: ['signup', 'contact'], support: ['support'], demo: ['demo'] };
+const KINDS = { signup: 'Регистрация', contact: 'Регистрация: контакт', account: 'Аккаунт без заявки', support: 'Поддержка', demo: 'Подобрать решение' };
+const KIND_GROUPS = { signup: ['signup', 'contact', 'account'], support: ['support'], demo: ['demo'] };
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'seg', 'ref'];
 const parseUtm = utm => { try { const u = JSON.parse(utm || '{}'); return u && typeof u === 'object' ? u : {}; } catch { return {}; } };
 const leadRows = () => q.allLeads.all().map(l => ({ ...l, created_at: `${l.created_at.replace(' ', 'T')}Z`, delivered: Boolean(l.delivered), utm: parseUtm(l.utm) }));
@@ -265,12 +306,12 @@ app.post('/api/admin/logout', (req, res) => {
   res.clearCookie(ADMIN_COOKIE, { path: '/' }); res.json({ ok: true });
 });
 app.use('/api/admin', (req, res, next) => (ADMIN_PASSWORD && isAdmin(req) ? next() : fail(res, ADMIN_PASSWORD ? 401 : 404, ADMIN_PASSWORD ? 'Нужно войти.' : 'Не найдено')));
-app.get('/api/admin/leads', (req, res) => res.json({ leads: leadRows(), kinds: KINDS, plans: PLANS, channels: CHANNELS }));
+app.get('/api/admin/leads', (req, res) => res.json({ leads: leadRows(), counts: q.counts.get(), kinds: KINDS, plans: PLANS, channels: CHANNELS }));
 app.get('/api/admin/leads.csv', (req, res) => {
   const leads = filterLeads(leadRows(), req.query.kind, req.query.q);
   const head = ['ID', 'Дата (МСК)', 'Тип', 'Продукт', 'Мессенджер', 'Контакт', 'E-mail', 'Тариф', 'Компания', 'Телефон', 'Сообщение', ...UTM_KEYS, 'Отправлено в Mattermost'];
   const lines = leads.map(l => [l.id, mskDate(l.created_at), KINDS[l.kind] || l.kind, l.product, CHANNELS[l.channel] || l.channel, l.contact, l.email,
-    PLANS[l.plan] || l.plan, l.company, l.phone, l.message, ...UTM_KEYS.map(k => l.utm[k]), l.delivered ? 'да' : 'нет']);
+    PLANS[l.plan] || '', l.company, l.phone, l.message, ...UTM_KEYS.map(k => l.utm[k]), l.delivered ? 'да' : 'нет']);
   const csv = '﻿' + [head, ...lines].map(r => r.map(csvCell).join(';')).join('\r\n') + '\r\n';
   const day = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Moscow' }).format(new Date());
   res.set({ 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': `attachment; filename="partnerka-leads-${day}.csv"` }).send(csv);
@@ -284,5 +325,11 @@ app.use(express.static(path.join(__dirname, 'public'), {
   setHeaders: (res, file) => { if (file.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache'); },
 }));
 app.use((req, res) => res.status(404).sendFile(path.join(__dirname, 'public', 'index.html')));
+// любая непойманная ошибка: пишем в лог (его видно в Coolify → Logs) и отвечаем без подробностей
+app.use((err, req, res, next) => {
+  console.error('[error]', req.method, req.originalUrl, err?.stack || err);
+  if (res.headersSent) return next(err);
+  res.status(err?.status && err.status < 500 ? err.status : 500).json({ error: 'Что-то пошло не так. Попробуйте ещё раз.' });
+});
 
 app.listen(PORT, () => console.log(`partnerka.io слушает :${PORT} (${IS_PROD ? 'production' : 'development'}), Mattermost: ${MM_WEBHOOK ? 'настроен' : 'нет, сообщения в логах'}`));

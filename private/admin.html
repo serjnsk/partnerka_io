@@ -168,7 +168,7 @@
   const $ = id => document.getElementById(id);
   const state = { leads: [], kinds: {}, plans: {}, channels: {}, kind: 'all', q: '' };
   const TABS = [['all', 'Все лиды'], ['signup', 'Регистрации'], ['support', 'Поддержка'], ['demo', 'Подобрать решение']];
-  const GROUPS = { signup: ['signup', 'contact'], support: ['support'], demo: ['demo'] };
+  const GROUPS = { signup: ['signup', 'contact', 'account'], support: ['support'], demo: ['demo'] };
   const inTab = (l, key) => key === 'all' || (GROUPS[key] || [key]).includes(l.kind);
 
   document.querySelectorAll('[data-logo]').forEach(el => el.append($('logo-tpl').content.cloneNode(true)));
@@ -200,7 +200,8 @@
     if (r.status === 401) return show('login');
     if (!r.ok) { $('updated').textContent = 'Не удалось загрузить лиды. Обновите страницу.'; return show('app'); }
     Object.assign(state, r.data);
-    $('updated').textContent = `Обновлено в ${fmtT.format(new Date())}`;
+    const c = r.data.counts || {};
+    $('updated').textContent = `Обновлено в ${fmtT.format(new Date())} · в базе аккаунтов: ${c.users ?? '—'}, заявок: ${c.leads ?? '—'}`;
     show('app'); render();
   }
 
@@ -260,7 +261,7 @@
         h('td', {}, l.product || l.company ? h('span', { className: 'strong' }, l.product || l.company) : h('span', { className: 'muted' }, '—')),
         h('td', {}, contactCell(l)),
         h('td', {}, l.email ? h('div', { className: 'contact' }, h('a', { href: `mailto:${l.email}` }, l.email), copyBtn(l.email)) : h('span', { className: 'muted' }, '—')),
-        h('td', {}, l.plan ? (state.plans[l.plan] || l.plan) : h('span', { className: 'muted' }, '—')),
+        h('td', {}, state.plans[l.plan] ? state.plans[l.plan] : h('span', { className: 'muted' }, '—')),
         h('td', {}, l.message ? h('div', { className: 'msg' }, l.message) : h('span', { className: 'muted' }, '—')),
         h('td', {}, utm.length ? h('div', { className: 'utm' }, utm.map(([k, v], i) => [i ? ', ' : '', h('b', {}, k), `=${v}`])) : h('span', { className: 'muted' }, 'прямой заход')),
       );
