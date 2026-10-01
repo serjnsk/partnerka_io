@@ -168,10 +168,7 @@ tailwind.config = {
   .fade-up { opacity: 0; transform: translateY(0.875rem); transition: opacity .6s ease, transform .6s ease; }
   .fade-up.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .fade-up { opacity: 1; transform: none; transition: none; } }
-  .code-box { width: 3rem; height: 3.5rem; border: 1px solid #D7D8E0; border-radius: .75rem; text-align: center; font-size: 1.375rem; font-weight: 600; color: #090B22; outline: none; transition: border .15s, box-shadow .15s; }
-  .code-box:focus { border-color: #4B5BEA; box-shadow: 0 0 0 3px rgba(75,91,234,.15); }
-  @media (max-width: 400px) { .code-box { width: 2.5rem; height: 3rem; font-size: 1.125rem; } }
-  .contact-opt { padding: .375rem .75rem; border-radius: .625rem; color: #68686A; font-weight: 500; }
+  .contact-opt { padding: .25rem .625rem; border-radius: .5rem; color: #68686A; font-weight: 500; }
   .contact-opt.on { background: #fff; color: #090B22; box-shadow: 0 1px 2px rgba(9,11,34,.08); }
   .btn[disabled] { opacity: .6; cursor: progress; }
   .modal-backdrop { background: rgba(9,11,34,.55); backdrop-filter: blur(0.25rem); }
@@ -201,7 +198,7 @@ tailwind.config = {
 
       <div class="hidden lg:flex items-center gap-1">
         <button class="nav-link" data-open-modal="login">Войти</button>
-        <button class="btn btn-primary ml-2 !rounded-lg !px-4 !py-2 !text-[0.875rem]" data-open-modal="signup" data-plan="plus">Ранний доступ <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        <button class="btn btn-primary ml-2 !rounded-lg !px-4 !py-2 !text-[0.875rem]" data-open-modal="signup" data-plan="plus">Начать бесплатно <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
       </div>
 
       <button id="burger" class="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-soft" aria-label="Открыть меню" aria-expanded="false">
@@ -217,7 +214,7 @@ tailwind.config = {
       <a href="#faq" class="nav-link">FAQ</a>
       <div class="mt-3 flex flex-col gap-2">
         <button class="btn btn-outline justify-center" data-open-modal="login">Войти</button>
-        <button class="btn btn-primary justify-center" data-open-modal="signup" data-plan="plus">Получить ранний доступ</button>
+        <button class="btn btn-primary justify-center" data-open-modal="signup" data-plan="plus">Начать бесплатно</button>
       </div>
     </div>
   </div>
@@ -227,9 +224,9 @@ tailwind.config = {
 <!-- ============ HERO ============ -->
 <section class="relative overflow-hidden bg-white">
   <div class="mx-auto max-w-[80rem] px-5 sm:px-8 pt-10 pb-10 sm:pt-14 sm:pb-[3.75rem] text-center">
-    <a href="#early" class="hero-badge">
-      <span class="hero-badge-chip">Ранний доступ</span>
-      <span class="hero-badge-text"><span class="hidden sm:inline">Первый </span>месяц платного тарифа бесплатно</span>
+    <a href="#pricing" class="hero-badge">
+      <span class="hero-badge-chip">0&nbsp;₽</span>
+      <span class="hero-badge-text">Бесплатно до&nbsp;1&nbsp;000&nbsp;кликов<span class="hidden sm:inline"> в&nbsp;месяц</span></span>
       <span class="hero-badge-arrow"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
@@ -241,7 +238,7 @@ tailwind.config = {
       Подключите к сайту, Telegram-боту или API. Смотрите прибыль по каждому партнёру, отсекайте фрод и платите партнёрам по российским правилам.
     </p>
     <div class="mt-8 flex justify-center">
-      <button class="btn btn-primary !rounded-xl !px-6 !py-4 !text-[1.125rem]" data-open-modal="signup" data-plan="plus">Получить ранний доступ <svg class="arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+      <button class="btn btn-primary !rounded-xl !px-6 !py-4 !text-[1.125rem]" data-open-modal="signup" data-plan="plus">Начать бесплатно <svg class="arrow" width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
     </div>
     <div class="mt-5 flex flex-col items-center justify-center gap-1.5 text-[0.875rem] text-muted sm:flex-row sm:gap-4">
       <span class="whitespace-nowrap">Без банковской карты</span>
@@ -634,23 +631,6 @@ tailwind.config = {
   </div>
 </section>
 
-<!-- ============ EARLY ACCESS ============ -->
-<section id="early" class="pt-4 sm:pt-8">
-  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
-    <div class="rounded-[1.75rem] bg-ink p-7 text-white sm:p-10 fade-up">
-      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div class="max-w-[42rem]">
-          <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[0.8125rem] font-medium text-white/85"><span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>Набираем первых пользователей</span>
-          <h2 class="h-section h-sm mt-4 text-white">Ранний доступ: первый месяц платного тарифа бесплатно</h2>
-          <p class="mt-3 text-[1.0625rem] text-white/70">Мы готовимся к запуску. Условие одно: вы начинаете интеграцию, как только откроем доступ, а наш менеджер помогает на каждом шаге.</p>
-        </div>
-        <button class="btn btn-white shrink-0 self-start lg:self-auto" data-open-modal="signup" data-plan="plus">Получить ранний доступ <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </div>
-      <div class="mt-8 grid gap-3 md:grid-cols-3"><div class="rounded-2xl bg-white/[0.06] p-5 ring-1 ring-inset ring-white/10"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[0.875rem] font-semibold text-ink">1</div><div class="mt-4 text-[1.0625rem] font-medium text-white">Создайте аккаунт</div><p class="mt-1.5 text-[0.9375rem] leading-snug text-white/65">Выберите тариф и подтвердите почту. Банковская карта не нужна.</p></div><div class="rounded-2xl bg-white/[0.06] p-5 ring-1 ring-inset ring-white/10"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[0.875rem] font-semibold text-ink">2</div><div class="mt-4 text-[1.0625rem] font-medium text-white">Менеджер поможет с интеграцией</div><p class="mt-1.5 text-[0.9375rem] leading-snug text-white/65">Свяжемся перед запуском, разберём вашу воронку и подключим сайт, бота или API.</p></div><div class="rounded-2xl bg-white/[0.06] p-5 ring-1 ring-inset ring-white/10"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[0.875rem] font-semibold text-ink">3</div><div class="mt-4 text-[1.0625rem] font-medium text-white">Месяц платного тарифа бесплатно</div><p class="mt-1.5 text-[0.9375rem] leading-snug text-white/65">Первый месяц за наш счёт.</p></div></div>
-    </div>
-  </div>
-</section>
-
 <!-- ============ PRICING ============ -->
 <section id="pricing" class="py-16 sm:py-24">
   <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
@@ -672,7 +652,7 @@ tailwind.config = {
         <p class="mt-1 text-[0.9375rem] text-muted">Запуск с нуля</p>
         <div class="mt-6 flex items-baseline gap-1.5"><span class="text-[2.5rem] font-semibold leading-none tracking-tight">0 ₽</span><span class="text-[0.875rem] text-muted">/ мес</span></div>
         <p class="mt-2 text-[0.8125rem] text-muted">Бессрочно, без банковской карты</p>
-        <button class="btn btn-outline mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="start">Создать аккаунт</button>
+        <button class="btn btn-outline mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="start">Начать бесплатно</button>
         <div class="mt-6 border-t border-line pt-5">
           <div class="mb-3 text-[0.8125rem] font-medium text-muted">Всё для запуска:</div>
           <ul class="space-y-2.5 text-[0.9375rem] leading-snug"><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span><b class="font-semibold">1 000</b> кликов в месяц<sup>*</sup></span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Реферальные, партнёрские и амбассадорские программы</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Интеграции: сайт, Telegram-бот, API</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Базовая аналитика</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg><span>Антифрод-модуль</span></li></ul>
@@ -685,8 +665,8 @@ tailwind.config = {
         </div>
         <p class="mt-1 text-[0.9375rem] text-white/65">Трафик пошёл</p>
         <div class="mt-6 flex items-baseline gap-1.5"><span class="text-[2.5rem] font-semibold leading-none tracking-tight" data-price data-monthly="999 ₽" data-yearly="799 ₽">999 ₽</span><span class="text-[0.875rem] text-white/65">/ мес</span></div>
-        <p class="mt-2 text-[0.8125rem] text-white/65" data-price-note data-monthly="Первый месяц бесплатно в раннем доступе" data-yearly="Первый месяц бесплатно, затем 9 588 ₽ за год">Первый месяц бесплатно в раннем доступе</p>
-        <button class="btn btn-white mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="plus">Получить месяц бесплатно</button>
+        <p class="mt-2 text-[0.8125rem] text-white/65" data-price-note data-monthly="7 дней бесплатно, затем помесячно" data-yearly="7 дней бесплатно, затем 9 588 ₽ за год">7 дней бесплатно, затем помесячно</p>
+        <button class="btn btn-white mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="plus">Попробовать 7 дней бесплатно</button>
         <div class="mt-6 border-t border-white/15 pt-5">
           <div class="mb-3 text-[0.8125rem] font-medium text-white/65">Всё из «Старт», плюс:</div>
           <ul class="space-y-2.5 text-[0.9375rem] leading-snug"><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">20 000</b> кликов в месяц<sup>*</sup></span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">Расширенная аналитика</b></span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span>Live-уведомления о конверсиях</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-[#8FA0FF]" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span>Приоритетная поддержка в чате</span></li></ul>
@@ -699,8 +679,8 @@ tailwind.config = {
         </div>
         <p class="mt-1 text-[0.9375rem] text-muted">Большая команда</p>
         <div class="mt-6 flex items-baseline gap-1.5"><span class="text-[2.5rem] font-semibold leading-none tracking-tight" data-price data-monthly="4 990 ₽" data-yearly="3 990 ₽">4 990 ₽</span><span class="text-[0.875rem] text-muted">/ мес</span></div>
-        <p class="mt-2 text-[0.8125rem] text-muted" data-price-note data-monthly="Первый месяц бесплатно в раннем доступе" data-yearly="Первый месяц бесплатно, затем 47 880 ₽ за год">Первый месяц бесплатно в раннем доступе</p>
-        <button class="btn btn-outline mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="premium">Получить месяц бесплатно</button>
+        <p class="mt-2 text-[0.8125rem] text-muted" data-price-note data-monthly="Помесячно, отмена в любой момент" data-yearly="47 880 ₽ за год, экономия 12 000 ₽">Помесячно, отмена в любой момент</p>
+        <button class="btn btn-outline mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="premium">Подключить «Премиум»</button>
         <div class="mt-6 border-t border-line pt-5">
           <div class="mb-3 text-[0.8125rem] font-medium text-muted">Всё из «Плюс», плюс:</div>
           <ul class="space-y-2.5 text-[0.9375rem] leading-snug"><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">200 000</b> кликов в месяц<sup>*</sup></span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">Модуль выплат:</b> заявки, статусы, общий баланс, акты</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">Юридический модуль:</b> шаблоны договоров и оферта</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span>Когорты, LTV и окупаемость партнёров</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">Кабинет партнёра на вашем домене</b></span></li></ul>
@@ -713,8 +693,8 @@ tailwind.config = {
         </div>
         <p class="mt-1 text-[0.9375rem] text-muted">Миллион кликов</p>
         <div class="mt-6 flex items-baseline gap-1.5"><span class="text-[2.5rem] font-semibold leading-none tracking-tight" data-price data-monthly="9 990 ₽" data-yearly="7 990 ₽">9 990 ₽</span><span class="text-[0.875rem] text-muted">/ мес</span></div>
-        <p class="mt-2 text-[0.8125rem] text-muted" data-price-note data-monthly="Первый месяц бесплатно в раннем доступе" data-yearly="Первый месяц бесплатно, затем 95 880 ₽ за год">Первый месяц бесплатно в раннем доступе</p>
-        <button class="btn btn-outline mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="ultra">Получить месяц бесплатно</button>
+        <p class="mt-2 text-[0.8125rem] text-muted" data-price-note data-monthly="Помесячно, отмена в любой момент" data-yearly="95 880 ₽ за год, экономия 24 000 ₽">Помесячно, отмена в любой момент</p>
+        <button class="btn btn-outline mt-6 w-full justify-center !text-[0.9375rem]" data-open-modal="signup" data-plan="ultra">Подключить «Ультра»</button>
         <div class="mt-6 border-t border-line pt-5">
           <div class="mb-3 text-[0.8125rem] font-medium text-muted">Всё из «Премиум», плюс:</div>
           <ul class="space-y-2.5 text-[0.9375rem] leading-snug"><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span><b class="font-semibold">1 000 000</b> кликов в месяц<sup>*</sup></span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span>Лимит в 5 раз выше</span></li><li class="flex gap-2.5"><svg class="mt-[0.1875rem] h-4 w-4 flex-none text-brand" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg><span>Клик в 2,5 раза дешевле</span></li></ul>
@@ -760,12 +740,8 @@ tailwind.config = {
       </div>
       <div>
         <details class="faq-item" open="">
-          <summary class="faq-q">Сервис уже работает?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></summary>
-          <div class="faq-a">Мы готовимся к запуску и набираем первых пользователей. Создайте аккаунт и подтвердите почту: мы пришлём сигнал о запуске, а менеджер поможет с интеграцией. Первым пользователям — месяц платного тарифа бесплатно.</div>
-        </details>
-        <details class="faq-item">
           <summary class="faq-q">Партнёрка действительно бесплатна для стартапов?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></summary>
-          <div class="faq-a">Да. Тариф «Старт» бесплатен без ограничения по времени: до 1 000 кликов в месяц, клики сверх лимита не теряются. А в раннем доступе первый месяц любого платного тарифа тоже бесплатный.</div>
+          <div class="faq-a">Да. Тариф «Старт» бесплатен без ограничения по времени: до 1 000 кликов в месяц, клики сверх лимита не теряются. Когда трафик вырастет, переходите на «Плюс»: первые 7 дней бесплатно.</div>
         </details>
         <details class="faq-item">
           <summary class="faq-q">Сколько времени занимает интеграция?<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M10 5l4 4-4 4" stroke="#090B22" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></summary>
@@ -796,9 +772,9 @@ tailwind.config = {
 <section class="cta-gradient text-white">
   <div class="mx-auto max-w-[80rem] px-5 sm:px-8 py-24 sm:py-32 text-center">
     <h2 class="h-section h-xl mx-auto max-w-[50rem]">Готовы запустить партнёрку?</h2>
-    <p class="mx-auto mt-5 max-w-[38.75rem] text-[1.125rem] sm:text-[1.25rem] text-white/80">Первым пользователям: месяц платного тарифа бесплатно и помощь менеджера с интеграцией.</p>
+    <p class="mx-auto mt-5 max-w-[38.75rem] text-[1.125rem] sm:text-[1.25rem] text-white/80">Запустите первую программу за 10 минут. Бесплатно и без банковской карты.</p>
     <div class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-      <button class="btn btn-white w-full justify-center sm:w-auto !px-6 !py-4" data-open-modal="signup" data-plan="plus">Получить ранний доступ <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+      <button class="btn btn-white w-full justify-center sm:w-auto !px-6 !py-4" data-open-modal="signup" data-plan="plus">Начать бесплатно <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
       <a class="btn btn-outline-white w-full justify-center sm:w-auto !px-6 !py-4" href="https://t.me/partnerka_support" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3c.3-1.3-.9-2.3-2.1-1.8L2.9 9c-1.3.5-1.2 2.4.1 2.8l4.3 1.3 1.6 5.2c.3 1 1.6 1.3 2.3.6l2.4-2.3 4.4 3.2c.9.7 2.3.2 2.5-1zM9.6 14.1l8-7.2-9.9 6.1"/></svg>Подобрать решение под ваш продукт</a>
     </div>
   </div>
@@ -818,7 +794,7 @@ tailwind.config = {
       </div>
       <div>
         <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Продукт</div>
-        <ul class="space-y-2.5 text-[0.875rem] text-white/85"><li><a href="#features" class="hover:text-white">Возможности</a></li><li><a href="#solutions" class="hover:text-white">Кому подходит</a></li><li><a href="#pricing" class="hover:text-white">Тарифы</a></li><li><a href="#early" class="hover:text-white">Ранний доступ</a></li><li><a href="#faq" class="hover:text-white">FAQ</a></li></ul>
+        <ul class="space-y-2.5 text-[0.875rem] text-white/85"><li><a href="#features" class="hover:text-white">Возможности</a></li><li><a href="#solutions" class="hover:text-white">Кому подходит</a></li><li><a href="#pricing" class="hover:text-white">Тарифы</a></li><li><a href="#faq" class="hover:text-white">FAQ</a></li></ul>
       </div>
       <div>
         <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Возможности</div>
@@ -826,7 +802,7 @@ tailwind.config = {
       </div>
       <div>
         <div class="mb-4 text-[0.8125rem] font-semibold uppercase tracking-wide text-white/50">Связаться</div>
-        <ul class="space-y-2.5 text-[0.875rem] text-white/85"><li><button type="button" class="hover:text-white" data-open-modal="signup" data-plan="plus">Получить ранний доступ</button></li><li><button type="button" class="hover:text-white" data-open-modal="support">Написать в поддержку</button></li><li><a href="https://t.me/partnerka_support" target="_blank" rel="noopener" class="hover:text-white">Telegram</a></li></ul>
+        <ul class="space-y-2.5 text-[0.875rem] text-white/85"><li><button type="button" class="hover:text-white" data-open-modal="signup" data-plan="plus">Создать аккаунт</button></li><li><button type="button" class="hover:text-white" data-open-modal="support">Написать в поддержку</button></li><li><a href="https://t.me/partnerka_support" target="_blank" rel="noopener" class="hover:text-white">Telegram</a></li></ul>
       </div>
     </div>
     <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-[0.8125rem] text-white/50 md:flex-row md:items-center md:justify-between">
@@ -852,35 +828,24 @@ tailwind.config = {
 
       <form id="modal-form" class="mt-6 space-y-3" novalidate="">
         <div id="f-company" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Компания</label><input class="input" type="text" name="company" placeholder="ООО «Скайлайн»"></div>
-        <div><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Рабочий e-mail</label><input class="input" type="email" name="email" placeholder="you@company.ru" required=""></div>
-        <div id="f-plan" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink" for="plan-select">Тариф после запуска</label>
-          <select class="input" id="plan-select" name="plan">
-            <option value="start">Старт — бесплатно</option>
-            <option value="plus">Плюс — первый месяц бесплатно</option>
-            <option value="premium">Премиум — первый месяц бесплатно</option>
-            <option value="ultra">Ультра — первый месяц бесплатно</option>
-            <option value="unknown">Пока не знаю, помогите выбрать</option>
-          </select></div>
-        <div id="f-password"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Пароль</label><input class="input" type="password" name="password" placeholder="Минимум 8 символов" minlength="8"></div>
-        <div id="f-message" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Сообщение</label><textarea class="input min-h-[7rem] resize-y" name="message" placeholder="Например: онлайн-школа, 3 курса, хотим платить блогерам 20% с продажи"></textarea></div>
-        <div id="f-phone" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Телефон</label><input class="input" type="tel" name="phone" placeholder="+7 (900) 000-00-00"></div>
+        <div><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Рабочий e-mail<span class="text-red-500" aria-hidden="true"> *</span></label><input class="input" type="email" name="email" placeholder="you@company.ru" required=""></div>
+        <input type="hidden" name="plan" id="plan-input" value="plus">
+        <div id="f-password"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Пароль<span class="text-red-500" aria-hidden="true"> *</span></label><input class="input" type="password" name="password" placeholder="Минимум 8 символов" minlength="8"></div>
+        <div id="f-contact" class="hidden">
+          <div class="mb-1.5 flex items-center justify-between gap-2"><span class="text-[0.8125rem] font-medium text-ink">Контакт для связи<span class="text-red-500" aria-hidden="true"> *</span></span>
+            <span class="inline-flex rounded-lg bg-soft p-0.5 text-[0.75rem]" role="radiogroup" aria-label="Мессенджер"><button type="button" class="contact-opt on" data-channel="telegram" role="radio" aria-checked="true">Telegram</button><button type="button" class="contact-opt" data-channel="max" role="radio" aria-checked="false">MAX</button></span></div>
+          <input type="hidden" name="channel" id="channel-input" value="telegram">
+          <input class="input" type="text" name="contact" id="contact-input" placeholder="https://t.me/username" autocomplete="off" aria-label="Контакт в мессенджере" aria-required="true" aria-describedby="contact-hint">
+          <p class="mt-1.5 text-[0.75rem] text-muted" id="contact-hint">Ссылка на ваш профиль вида https://t.me/username. Подойдёт и @username или номер телефона.</p>
+        </div>
+        <div id="f-product" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink" for="product-input">Название продукта<span class="text-red-500" aria-hidden="true"> *</span></label><input class="input" type="text" name="product" id="product-input" placeholder="Например, Skyline CRM" maxlength="120" aria-required="true"></div>
+        <div id="f-message" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Сообщение<span class="text-red-500" aria-hidden="true"> *</span></label><textarea class="input min-h-[7rem] resize-y" name="message" placeholder="Например: онлайн-школа, 3 курса, хотим платить блогерам 20% с продажи"></textarea></div>
+        <div id="f-phone" class="hidden"><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Телефон<span class="text-red-500" aria-hidden="true"> *</span></label><input class="input" type="tel" name="phone" placeholder="+7 (900) 000-00-00"></div>
         <p id="modal-error" class="hidden text-[0.8125rem] text-red-600"></p>
         <label id="f-consent" class="flex items-start gap-2.5 pt-1 text-[0.8125rem] text-body"><input type="checkbox" name="consent" class="mt-0.5 h-4 w-4 shrink-0 rounded border-line accent-brand"><span>Я даю <a href="consent.html" target="_blank" class="underline text-ink">согласие на обработку персональных данных</a> и принимаю <a href="privacy.html" target="_blank" class="underline text-ink">политику конфиденциальности</a></span></label>
         <button type="submit" class="btn btn-primary w-full justify-center !py-[0.875rem]" id="modal-submit">Создать аккаунт <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
       </form>
       <p id="modal-switch" class="mt-5 text-center text-[0.8125rem] text-muted">Уже есть аккаунт? <button class="font-medium text-ink underline" data-open-modal="login">Войти</button></p>
-    </div>
-
-    <div id="modal-verify" class="hidden">
-      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brandlight text-brand"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg></div>
-      <h3 class="h-card mt-5 text-ink">Подтвердите почту</h3>
-      <p class="mt-2 text-[0.9375rem] text-body">Мы отправили код из 6 цифр на <b class="font-semibold text-ink" id="verify-email"></b></p>
-      <form id="verify-form" class="mt-6" novalidate>
-        <div class="flex justify-between gap-2" id="code-boxes"><input class="code-box" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Цифра 1"><input class="code-box" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Цифра 2"><input class="code-box" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Цифра 3"><input class="code-box" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Цифра 4"><input class="code-box" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Цифра 5"><input class="code-box" type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="Цифра 6"></div>
-        <p id="verify-error" class="mt-3 hidden text-[0.8125rem] text-red-600"></p>
-        <button type="submit" class="btn btn-primary mt-5 w-full justify-center !py-[0.875rem]">Подтвердить <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      </form>
-      <p class="mt-5 text-center text-[0.8125rem] text-muted">Письмо не пришло? <button type="button" class="font-medium text-ink underline disabled:no-underline disabled:text-muted" id="resend-btn">Отправить ещё раз</button> <span id="resend-timer"></span></p>
     </div>
 
     <div id="modal-success" class="hidden text-center py-4">
@@ -1119,30 +1084,39 @@ tailwind.config = {
     });
   }).catch(() => {});
 
-  // ---- modal: регистрация → код из письма → кабинет-заглушка /app
+  // ---- modal: регистрация (почта, пароль, контакт, продукт) → /app
   const modal = document.getElementById('modal');
-  const screens = { form: document.getElementById('modal-form-wrap'), verify: document.getElementById('modal-verify'), done: document.getElementById('modal-success') };
+  const screens = { form: document.getElementById('modal-form-wrap'), done: document.getElementById('modal-success') };
   const form = document.getElementById('modal-form'), err = document.getElementById('modal-error');
   const title = document.getElementById('modal-title'), sub = document.getElementById('modal-sub'), submit = document.getElementById('modal-submit'), sw = document.getElementById('modal-switch');
-  const f = { company: document.getElementById('f-company'), pass: document.getElementById('f-password'), phone: document.getElementById('f-phone'), consent: document.getElementById('f-consent'), message: document.getElementById('f-message'), plan: document.getElementById('f-plan') };
-  const planSelect = document.getElementById('plan-select');
-  const PLAN_KEYS = ['start','plus','premium','ultra','unknown'];
-  let mode = 'signup', lastFocus = null, state = { email: '' };
+  const f = { company: document.getElementById('f-company'), pass: document.getElementById('f-password'), phone: document.getElementById('f-phone'), consent: document.getElementById('f-consent'), message: document.getElementById('f-message'), contact: document.getElementById('f-contact'), product: document.getElementById('f-product') };
+  const planInput = document.getElementById('plan-input'), channelInput = document.getElementById('channel-input'), contactInput = document.getElementById('contact-input');
+  const PLAN_KEYS = ['start','plus','premium','ultra'];
+  let mode = 'signup', lastFocus = null;
   const variants = {
-    signup: { title: 'Ранний доступ', sub: 'Создайте аккаунт: пришлём сигнал о запуске, а первый месяц платного тарифа будет бесплатным.', btn: 'Создать аккаунт', plan: true, pass: true, consent: true, sw: 'Уже есть аккаунт? <button class="font-medium text-ink underline" data-open-modal="login">Войти</button>' },
-    login:  { title: 'Вход', sub: 'Введите e-mail и пароль от вашего аккаунта.', btn: 'Войти', pass: true, sw: 'Нет аккаунта? <button class="font-medium text-ink underline" data-open-modal="signup" data-plan="plus">Получить ранний доступ</button>' },
+    signup: { title: 'Создайте аккаунт', sub: 'Бесплатно, без банковской карты.', btn: 'Далее', pass: true, contact: true, product: true, consent: true, sw: 'Уже есть аккаунт? <button class="font-medium text-ink underline" data-open-modal="login">Войти</button>' },
+    login:  { title: 'Вход', sub: 'Введите e-mail и пароль от вашего аккаунта.', btn: 'Войти', pass: true, sw: 'Нет аккаунта? <button class="font-medium text-ink underline" data-open-modal="signup" data-plan="plus">Создать аккаунт</button>' },
     support:{ title: 'Чат поддержки', sub: 'Расскажите о проекте, и мы поможем настроить партнёрскую программу.', btn: 'Отправить', message: true, consent: true, ok: 'Сообщение отправлено', okText: 'Мы ответим на указанный e-mail.' },
     demo:   { title: 'Подобрать решение под ваш продукт', sub: 'Расскажите о проекте, и мы предложим подходящую схему партнёрской программы.', btn: 'Отправить заявку', company: true, phone: true, consent: true, ok: 'Заявка отправлена', okText: 'Свяжемся с вами по указанному телефону.' },
   };
   const show = name => Object.entries(screens).forEach(([k, el]) => el.classList.toggle('hidden', k !== name));
+  const setChannel = ch => {
+    channelInput.value = ch;
+    document.querySelectorAll('#f-contact .contact-opt').forEach(x => { const on = x.dataset.channel === ch; x.classList.toggle('on', on); x.setAttribute('aria-checked', String(on)); });
+    contactInput.placeholder = ch === 'telegram' ? 'https://t.me/username' : '+7 900 123-45-67';
+    document.getElementById('contact-hint').textContent = ch === 'telegram'
+      ? 'Ссылка на ваш профиль вида https://t.me/username. Подойдёт и @username или номер телефона.'
+      : 'Номер телефона, к которому привязан ваш аккаунт в MAX.';
+  };
+  document.querySelectorAll('#f-contact .contact-opt').forEach(b => b.addEventListener('click', () => { setChannel(b.dataset.channel); contactInput.focus(); }));
   function applyMode(m, plan){
     mode = m; const v = variants[m];
     title.textContent = v.title; sub.textContent = v.sub; submit.firstChild.textContent = v.btn + ' ';
     Object.entries(f).forEach(([k, el]) => el.classList.toggle('hidden', !v[k]));
     f.pass.querySelector('input').setAttribute('autocomplete', m === 'login' ? 'current-password' : 'new-password');
     sw.innerHTML = v.sw || ''; sw.classList.toggle('hidden', !v.sw);
-    err.classList.add('hidden'); form.reset(); busy(submit, false);
-    if (plan && PLAN_KEYS.includes(plan)) planSelect.value = plan;
+    err.classList.add('hidden'); form.reset(); busy(submit, false); setChannel('telegram');
+    planInput.value = PLAN_KEYS.includes(plan) ? plan : 'plus';
     show('form');
   }
   function openModal(m, plan){
@@ -1155,7 +1129,7 @@ tailwind.config = {
   }
   function closeModal(){
     modal.classList.add('hidden'); modal.classList.remove('flex');
-    document.body.style.overflow = ''; clearInterval(timer);
+    document.body.style.overflow = '';
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   document.addEventListener('click', e => {
@@ -1166,57 +1140,31 @@ tailwind.config = {
   const showErr = (el, t) => { el.textContent = t; el.classList.remove('hidden'); };
   if (new URLSearchParams(location.search).get('login') === '1') openModal('login');
 
-  // шаг 1: форма
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const v = variants[mode], fd = new FormData(form), email = (fd.get('email') || '').trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr(err, 'Укажите корректный e-mail.');
     if (v.pass && (fd.get('password') || '').length < 8) return showErr(err, 'Пароль должен быть не короче 8 символов.');
+    if (v.contact && !(fd.get('contact') || '').trim()) return showErr(err, 'Укажите контакт в Telegram или MAX.');
+    if (v.product && (fd.get('product') || '').trim().length < 2) return showErr(err, 'Укажите название продукта.');
     if (v.message && !(fd.get('message') || '').trim()) return showErr(err, 'Напишите пару слов о вашем проекте.');
     if (v.phone && !(fd.get('phone') || '').trim()) return showErr(err, 'Укажите телефон, чтобы мы могли связаться.');
     if (v.consent && !fd.get('consent')) return showErr(err, 'Нужно дать согласие на обработку персональных данных.');
-    err.classList.add('hidden'); busy(submit, true); state.email = email;
+    err.classList.add('hidden'); busy(submit, true);
     let r;
     if (mode === 'signup') {
-      r = await api('/api/signup', { email, password: fd.get('password'), plan: fd.get('plan'), consent: true, utm: getUtm() });
-      if (r.ok) { track('signup_submit', { plan: fd.get('plan') }); startVerify(); }
-      else if (r.code === 'exists') { applyMode('login'); form.querySelector('[name=email]').value = email; showErr(err, r.error); }
+      r = await api('/api/signup', { email, password: fd.get('password'), channel: fd.get('channel'), contact: fd.get('contact'), product: fd.get('product'), plan: fd.get('plan'), consent: true, utm: getUtm() });
+      if (r.ok) { track('signup_submit', { plan: fd.get('plan'), channel: fd.get('channel') }); location.href = r.redirect || '/app'; return; }
+      if (r.code === 'exists') { applyMode('login'); form.querySelector('[name=email]').value = email; busy(submit, false); return showErr(err, r.error); }
     } else if (mode === 'login') {
       r = await api('/api/login', { email, password: fd.get('password') });
-      if (r.ok && r.needVerify) { track('login_need_verify'); startVerify(); }
-      else if (r.ok) { track('login_submit'); location.href = r.redirect || '/app'; return; }
+      if (r.ok) { track('login_submit'); location.href = r.redirect || '/app'; return; }
     } else {
       r = await api('/api/request', { kind: mode, email, message: fd.get('message'), company: fd.get('company'), phone: fd.get('phone'), consent: true, utm: getUtm() });
       if (r.ok) { track(mode + '_submit'); document.getElementById('success-title').textContent = v.ok; document.getElementById('success-text').textContent = v.okText; show('done'); }
     }
     busy(submit, false);
-    if (!r.ok && r.code !== 'exists') showErr(err, r.error);
-  });
-
-  // шаг 2: код из письма
-  const boxes = [...document.querySelectorAll('.code-box')], vErr = document.getElementById('verify-error'), vForm = document.getElementById('verify-form');
-  const resend = document.getElementById('resend-btn'), timerEl = document.getElementById('resend-timer'); let timer;
-  function runTimer(t = 30){ resend.disabled = true; timerEl.textContent = '0:' + String(t).padStart(2, '0'); clearInterval(timer); timer = setInterval(() => { t--; timerEl.textContent = t > 0 ? '0:' + String(t).padStart(2, '0') : ''; if (t <= 0) { clearInterval(timer); resend.disabled = false; } }, 1000); }
-  function startVerify(){ document.getElementById('verify-email').textContent = state.email; boxes.forEach(b => b.value = ''); vErr.classList.add('hidden'); show('verify'); runTimer(); setTimeout(() => boxes[0].focus(), 30); }
-  resend.addEventListener('click', async () => {
-    const r = await api('/api/resend', { email: state.email });
-    if (r.ok) { track('code_resend'); vErr.classList.add('hidden'); runTimer(); } else { showErr(vErr, r.error); if (r.wait) runTimer(r.wait); }
-  });
-  boxes.forEach((b, k) => {
-    b.addEventListener('input', () => { b.value = b.value.replace(/\D/g, '').slice(0, 1); if (b.value && boxes[k + 1]) boxes[k + 1].focus(); if (boxes.every(x => x.value)) vForm.requestSubmit(); });
-    b.addEventListener('keydown', e => { if (e.key === 'Backspace' && !b.value && boxes[k - 1]) boxes[k - 1].focus(); });
-    b.addEventListener('paste', e => { const d = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6); if (!d) return; e.preventDefault(); d.split('').forEach((c, n) => { if (boxes[n]) boxes[n].value = c; }); (boxes[d.length] || boxes[5]).focus(); if (d.length === 6) vForm.requestSubmit(); });
-  });
-  let verifying = false;
-  vForm.addEventListener('submit', async e => {
-    e.preventDefault(); if (verifying) return;
-    const code = boxes.map(b => b.value).join('');
-    if (code.length < 6) return showErr(vErr, 'Введите все 6 цифр кода из письма.');
-    verifying = true; const btn = vForm.querySelector('button[type=submit]'); busy(btn, true);
-    const r = await api('/api/verify', { email: state.email, code });
-    verifying = false; busy(btn, false);
-    if (!r.ok) { showErr(vErr, r.error); boxes.forEach(b => b.value = ''); boxes[0].focus(); return; }
-    clearInterval(timer); track('email_verified'); location.href = r.redirect || '/app';
+    if (!r.ok) showErr(err, r.error);
   });
 })();
 </script>

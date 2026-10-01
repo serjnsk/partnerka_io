@@ -1,25 +1,25 @@
-# partnerka.io — лендинг раннего доступа
+# partnerka.io — лендинг
 
-Лендинг сервиса партнёрских программ и воронка смоук-теста:
-регистрация с паролем → код подтверждения на почту → кабинет-заглушка `/app`
-с размытым дашбордом и формой контакта в Telegram или MAX.
+Лендинг сервиса партнёрских программ.
+Регистрация: почта, пароль, контакт в Telegram или MAX и название продукта →
+кабинет `/app`: на фоне размытый дашборд, поверх сообщение, что менеджер свяжется в течение суток.
 
-Каждая подтверждённая регистрация, оставленный контакт и обращение из форм
-сохраняются в SQLite и отправляются в канал Mattermost.
+Каждая регистрация и обращение из форм сохраняются в SQLite и отправляются в канал Mattermost.
 
 ## Устройство
 
 | Путь | Что это |
 |---|---|
-| `server.js` | Сервер на Express: API, сессии, отправка писем, вебхук Mattermost |
+| `server.js` | Сервер на Express: API, сессии, вебхук Mattermost |
 | `public/index.html` | Лендинг |
-| `public/app.html` | Кабинет-заглушка, доступен только после подтверждения почты |
+| `public/app.html` | Кабинет после регистрации, доступен только с сессией |
 | `public/privacy.html`, `public/consent.html` | Юридические страницы, пока заглушки |
 | `public/logos.html`, `public/logo/` | Варианты логотипа |
+| `private/admin.html` | Страница `/admin`: лиды и выгрузка в CSV, отдаётся только сервером |
 | `data/partnerka.db` | База SQLite, создаётся при первом запуске (в Docker — том `/data`) |
 
-API: `POST /api/signup`, `/api/verify`, `/api/resend`, `/api/login`, `/api/logout`,
-`/api/lead`, `/api/request`, `GET /api/me`, `GET /healthz`.
+API: `POST /api/signup`, `/api/login`, `/api/logout`, `/api/request`, `GET /api/me`, `GET /healthz`.
+Админка: `POST /api/admin/login`, `/api/admin/logout`, `GET /api/admin/leads`, `/api/admin/leads.csv?kind=&q=`.
 
 ## Локальный запуск
 
@@ -30,31 +30,31 @@ npm install
 npm run dev
 ```
 
-Без настроек SMTP и Mattermost коды подтверждения и сообщения печатаются в лог сервера.
+Без `MATTERMOST_WEBHOOK_URL` сообщения для Mattermost печатаются в лог сервера.
+Чтобы открыть `/admin` локально, положите в `.env` строку `ADMIN_PASSWORD=...`: `npm run dev` подхватит её сам.
 
 ## Деплой в Coolify
 
 1. **New Resource → Public/Private Repository**, репозиторий `serjnsk/partnerka_io`, ветка `main`.
 2. **Build Pack: Dockerfile**. Порт приложения `3000`.
-3. **Environment Variables** — из `.env.example`: `SMTP_*`, `MATTERMOST_WEBHOOK_URL`, `NODE_ENV=production`.
+3. **Environment Variables** — из `.env.example`: `MATTERMOST_WEBHOOK_URL`, `ADMIN_PASSWORD`, `NODE_ENV=production`.
 4. **Storages → Volume Mount** с путём назначения `/data`. Без тома база пропадёт при каждом деплое.
 5. **Domains**: `https://partnerka.io` (и при желании `https://www.partnerka.io`). Coolify сам выпустит сертификат Let's Encrypt.
 6. DNS у регистратора: A-запись домена на IP сервера Coolify.
 7. Включите автодеплой по push в `main`.
 
-### Почта
-
-Для доставки писем с кодом в домене нужны SPF, DKIM и DMARC от выбранного SMTP-провайдера.
-Без них письма будут попадать в спам.
-
 ### Mattermost
 
 Integrations → Incoming Webhooks → Add → выберите канал и скопируйте URL в `MATTERMOST_WEBHOOK_URL`.
 
-### Выгрузка лидов
+### Лиды
+
+Все лиды — на странице `https://partnerka.io/admin`, вход по паролю из `ADMIN_PASSWORD`. Там же фильтр по типу, поиск и кнопка «Скачать CSV» (Excel, разделитель «;», время московское). Пока переменная не задана, страница отключена и отвечает 404. После смены пароля все входы сбрасываются.
+
+Запасной вариант — из терминала контейнера в Coolify:
 
 ```bash
-sqlite3 /data/partnerka.db "SELECT created_at, kind, email, channel, contact, plan, utm FROM leads ORDER BY id DESC;"
+node -e "const {DatabaseSync}=require('node:sqlite');const db=new DatabaseSync('/data/partnerka.db',{readOnly:true});console.table(db.prepare('select * from leads order by id desc').all())"
 ```
 
 ## Перед запуском смоук-теста

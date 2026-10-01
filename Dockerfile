@@ -1,4 +1,4 @@
-# partnerka.io — лендинг раннего доступа
+# partnerka.io — лендинг, регистрация и админка с лидами
 FROM node:24-slim
 
 ENV NODE_ENV=production \
@@ -11,6 +11,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 
 COPY server.js ./
 COPY public ./public
+COPY private ./private
 
 # база SQLite живёт на постоянном томе /data
 RUN mkdir -p /data && chown -R node:node /data /app

@@ -169,10 +169,7 @@ tailwind.config = {
   .fade-up { opacity: 0; transform: translateY(0.875rem); transition: opacity .6s ease, transform .6s ease; }
   .fade-up.in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .fade-up { opacity: 1; transform: none; transition: none; } }
-  .code-box { width: 3rem; height: 3.5rem; border: 1px solid #D7D8E0; border-radius: .75rem; text-align: center; font-size: 1.375rem; font-weight: 600; color: #090B22; outline: none; transition: border .15s, box-shadow .15s; }
-  .code-box:focus { border-color: #4B5BEA; box-shadow: 0 0 0 3px rgba(75,91,234,.15); }
-  @media (max-width: 400px) { .code-box { width: 2.5rem; height: 3rem; font-size: 1.125rem; } }
-  .contact-opt { padding: .375rem .75rem; border-radius: .625rem; color: #68686A; font-weight: 500; }
+  .contact-opt { padding: .25rem .625rem; border-radius: .5rem; color: #68686A; font-weight: 500; }
   .contact-opt.on { background: #fff; color: #090B22; box-shadow: 0 1px 2px rgba(9,11,34,.08); }
   .btn[disabled] { opacity: .6; cursor: progress; }
   .modal-backdrop { background: rgba(9,11,34,.55); backdrop-filter: blur(0.25rem); }
@@ -183,9 +180,6 @@ tailwind.config = {
 </style>
 <style>
   .app-bg { filter: blur(7px) saturate(.9); transform: scale(1.03); transform-origin: top center; pointer-events: none; user-select: none; }
-  .contact-opt { padding: .375rem .875rem; border-radius: .625rem; color: #68686A; font-weight: 500; }
-  .contact-opt.on { background: #fff; color: #090B22; box-shadow: 0 1px 2px rgba(9,11,34,.08); }
-  .btn[disabled] { opacity: .6; cursor: progress; }
 </style>
 </head>
 <body class="font-sans text-body bg-white">
@@ -298,81 +292,37 @@ tailwind.config = {
   </div></div>
 
   <div class="fixed inset-0 z-10 flex items-center justify-center overflow-y-auto bg-gradient-to-b from-white/30 to-white/70 p-4">
-    <main class="w-full max-w-[30rem] rounded-[1.5rem] bg-white p-7 shadow-mock ring-1 ring-line sm:p-8">
+    <main class="w-full max-w-[30rem] rounded-[1.5rem] bg-white p-7 shadow-mock ring-1 ring-line sm:p-8" role="dialog" aria-labelledby="app-title">
       <div class="flex items-center justify-between gap-3">
         <div class="flex items-center gap-2"><svg class="h-7 w-7 flex-none" viewBox="0 0 48 48" aria-hidden="true"><defs><clipPath id="lk-card"><rect x="14" y="24" width="20" height="12"/></clipPath></defs><g transform="rotate(-45 24 24)"><rect x="18" y="17" width="26" height="14" rx="7" fill="none" stroke="#4B5BEA" stroke-width="5"/><rect x="4" y="17" width="26" height="14" rx="7" fill="none" stroke="#FFFFFF" stroke-width="9"/><rect x="4" y="17" width="26" height="14" rx="7" fill="none" stroke="#090B22" stroke-width="5"/><g clip-path="url(#lk-card)"><rect x="18" y="17" width="26" height="14" rx="7" fill="none" stroke="#FFFFFF" stroke-width="9"/><rect x="18" y="17" width="26" height="14" rx="7" fill="none" stroke="#4B5BEA" stroke-width="5"/></g></g></svg><span class="logo-word text-[1.0625rem] text-ink">partnerka<span class="text-brand">.io</span></span></div>
         <button type="button" class="text-[0.8125rem] font-medium text-muted hover:text-ink" id="logout">Выйти</button>
       </div>
-
-      <section id="step-form">
-        <div class="mt-6 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[0.75rem] font-medium text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Вы в списке раннего доступа</div>
-        <h1 class="h-card mt-4 text-ink">Кабинет почти готов</h1>
-        <p class="mt-2 text-[0.9375rem] leading-relaxed text-body">Мы запускаемся совсем скоро. Оставьте живой контакт в Telegram или MAX: менеджер напишет вам в день запуска и поможет с интеграцией.</p>
-        <div class="mt-4 flex items-center gap-3 rounded-xl border border-brand/20 bg-brandlight/60 px-4 py-3 text-[0.875rem] text-ink"><span class="text-[1.125rem]" aria-hidden="true">🎁</span><span id="bonus">Первый месяц любого платного тарифа для вас <b class="font-semibold">бесплатно</b></span></div>
-        <form id="lead-form" class="mt-5 space-y-3" novalidate>
-          <div>
-            <span class="mb-1.5 block text-[0.8125rem] font-medium text-ink">Где с вами связаться</span>
-            <div class="inline-flex rounded-xl bg-soft p-1 text-[0.8125rem]" role="radiogroup" aria-label="Мессенджер">
-              <button type="button" class="contact-opt on" data-channel="telegram" role="radio" aria-checked="true">Telegram</button>
-              <button type="button" class="contact-opt" data-channel="max" role="radio" aria-checked="false">MAX</button>
-            </div>
-          </div>
-          <input class="input" type="text" name="contact" id="contact" placeholder="@username или номер телефона" autocomplete="off" aria-label="Контакт в мессенджере">
-          <div><label class="mb-1.5 block text-[0.8125rem] font-medium text-ink" for="product">Ваш продукт <span class="font-normal text-muted">необязательно</span></label><input class="input" type="text" name="product" id="product" placeholder="Ссылка на сайт, бота или приложение"></div>
-          <p id="lead-error" class="hidden text-[0.8125rem] text-red-600"></p>
-          <button type="submit" class="btn btn-primary w-full justify-center !py-[0.875rem]">Оставить контакт <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </form>
-        <p class="mt-4 text-center text-[0.75rem] text-muted" id="account-email"></p>
-      </section>
-
-      <section id="step-done" class="hidden text-center">
-        <div class="mx-auto mt-8 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-        <h1 class="h-card h-card-sm mt-5 text-ink">Спасибо, мы на связи</h1>
-        <p class="mt-2 text-[0.9375rem] text-body" id="done-text"></p>
-        <p class="mt-4 text-[0.8125rem] text-muted">Кабинет откроется в день запуска. Первый месяц платного тарифа уже закреплён за вами.</p>
-        <button type="button" class="mt-6 text-[0.8125rem] font-medium text-ink underline" id="edit-contact">Изменить контакт</button>
-      </section>
+      <div class="mt-7 flex h-14 w-14 items-center justify-center rounded-2xl bg-brandlight text-brand"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+      <div class="mt-5 inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[0.75rem] font-medium text-amber-700"><span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>Регистрация на подтверждении</div>
+      <h1 class="h-card mt-3 text-ink" id="app-title">Спасибо за регистрацию</h1>
+      <p class="mt-2 text-[0.9375rem] leading-relaxed text-body">В течение суток с вами свяжется менеджер, чтобы подтвердить регистрацию и помочь с настройкой.</p>
+      <dl class="mt-5 divide-y divide-line rounded-xl border border-line text-[0.875rem]">
+        <div class="flex items-center justify-between gap-4 px-4 py-3"><dt class="text-muted">Продукт</dt><dd class="truncate font-medium text-ink" id="info-product">—</dd></div>
+        <div class="flex items-center justify-between gap-4 px-4 py-3"><dt class="text-muted" id="info-channel">Связь</dt><dd class="truncate font-medium text-ink" id="info-contact">—</dd></div>
+        <div class="flex items-center justify-between gap-4 px-4 py-3"><dt class="text-muted">Аккаунт</dt><dd class="truncate font-medium text-ink" id="info-email">—</dd></div>
+      </dl>
     </main>
   </div>
 
 <script>
 (function(){
   const $ = id => document.getElementById(id);
-  const CH = { telegram: 'Telegram', max: 'MAX' };
-  let channel = 'telegram';
-  const api = async (url, body) => {
-    let r; try { r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(body || {}) }); }
-    catch { return { ok: false, error: 'Нет связи с сервером. Попробуйте ещё раз.' }; }
-    let d = {}; try { d = await r.json(); } catch {}
-    return r.ok ? { ok: true, ...d } : { ok: false, status: r.status, error: d.error || 'Что-то пошло не так.' };
-  };
-  const showDone = (ch, contact) => { $('done-text').textContent = 'Напишем вам в ' + CH[ch] + ': ' + contact; $('step-form').classList.add('hidden'); $('step-done').classList.remove('hidden'); };
-  document.querySelectorAll('.contact-opt').forEach(b => b.addEventListener('click', () => {
-    channel = b.dataset.channel;
-    document.querySelectorAll('.contact-opt').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', String(x === b)); });
-    $('contact').placeholder = channel === 'telegram' ? '@username или номер телефона' : 'Ник или номер телефона в MAX';
-    $('contact').focus();
-  }));
   fetch('/api/me', { credentials: 'same-origin' }).then(r => r.json()).then(me => {
     if (!me.authenticated) throw new Error('guest');
-    $('account-email').textContent = 'Аккаунт: ' + me.email;
-    if (['plus','premium','ultra'].includes(me.plan)) $('bonus').innerHTML = 'За вами закреплён <b class="font-semibold">первый месяц тарифа «' + me.planName + '» бесплатно</b>';
-    if (me.contact) showDone(me.contact.channel, me.contact.contact);
+    $('info-product').textContent = me.product || '—';
+    $('info-channel').textContent = me.channelName || 'Связь';
+    $('info-contact').textContent = me.contact || '—';
+    $('info-email').textContent = me.email;
   }).catch(() => { location.href = '/?login=1'; });
-  $('lead-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const contact = $('contact').value.trim(), err = $('lead-error'), btn = e.target.querySelector('button[type=submit]');
-    if (!contact) { err.textContent = 'Укажите ник или номер телефона.'; err.classList.remove('hidden'); return; }
-    btn.disabled = true;
-    const r = await api('/api/lead', { channel, contact, product: $('product').value.trim() });
-    btn.disabled = false;
-    if (!r.ok) { if (r.status === 401) { location.href = '/?login=1'; return; } err.textContent = r.error; err.classList.remove('hidden'); return; }
-    err.classList.add('hidden');
-    (window.dataLayer = window.dataLayer || []).push({ event: 'contact_left', channel });
-    showDone(channel, contact);
+  $('logout').addEventListener('click', async () => {
+    try { await fetch('/api/logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: '{}' }); } catch {}
+    location.href = '/';
   });
-  $('edit-contact').addEventListener('click', () => { $('step-done').classList.add('hidden'); $('step-form').classList.remove('hidden'); $('contact').focus(); });
-  $('logout').addEventListener('click', async () => { await api('/api/logout'); location.href = '/'; });
 })();
 </script>
 </body>

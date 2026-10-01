@@ -2,16 +2,17 @@
   "name": "partnerka-landing",
   "version": "1.0.0",
   "private": true,
-  "description": "Лендинг и ранний доступ partnerka.io: регистрация, подтверждение почты, сбор лидов в Mattermost",
+  "description": "Лендинг partnerka.io: регистрация с контактом и продуктом, лиды в Mattermost",
   "type": "module",
   "main": "server.js",
-  "engines": { "node": ">=22.13" },
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "start": "node server.js",
-    "dev": "NODE_ENV=development node --watch server.js"
+    "dev": "NODE_ENV=development node --env-file-if-exists=.env --watch server.js"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "nodemailer": "^7.0.0"
+    "express": "^5.1.0"
   }
 }

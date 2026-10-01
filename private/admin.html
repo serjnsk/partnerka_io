@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лиды — partnerka.io</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="/logo/v4-ssylka-app-icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #090B22; --body: #363636; --muted: #68686A; --line: #E6E7EC; --soft: #F6F6F8;
+    --brand: #4B5BEA; --brandlight: #EEF0FF; --bg: #FAFAFB; --card: #FFFFFF;
+    --green: #047857; --greenbg: #ECFDF5; --amber: #B45309; --amberbg: #FFFBEB; --red: #DC2626;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--body); font: 400 0.875rem/1.45 Onest, ui-sans-serif, system-ui, sans-serif; }
+  a { color: inherit; }
+  button, input { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+
+  .wrap { max-width: 90rem; margin: 0 auto; padding: 0 1rem; }
+  @media (min-width: 768px) { .wrap { padding: 0 2rem; } }
+
+  .logo { display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; }
+  .logo svg { width: 1.75rem; height: 1.75rem; flex: none; }
+  .logo b { font-weight: 700; font-size: 1.0625rem; color: var(--ink); letter-spacing: -.01em; }
+  .logo b span { color: var(--brand); }
+
+  header { background: var(--card); border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; height: 3.75rem; }
+  .crumb { color: var(--muted); font-weight: 500; }
+  .crumb::before { content: "/"; margin: 0 .625rem 0 .25rem; color: var(--line); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .375rem; height: 2.375rem; padding: 0 .875rem; border-radius: .625rem; border: 1px solid var(--line); background: var(--card); font-weight: 500; color: var(--ink); cursor: pointer; text-decoration: none; white-space: nowrap; }
+  .btn:hover { background: var(--soft); }
+  .btn.primary { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .btn.primary:hover { background: #22243d; }
+  .btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+  .btn.ghost:hover { color: var(--ink); background: var(--soft); }
+  .btn svg { width: 1rem; height: 1rem; flex: none; }
+  .btn[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+
+  h1 { margin: 1.75rem 0 .25rem; font-size: 1.5rem; line-height: 1.2; font-weight: 600; color: var(--ink); letter-spacing: -.02em; }
+  .sub { margin: 0; color: var(--muted); }
+
+  .tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .625rem; margin: 1.25rem 0 1rem; }
+  @media (min-width: 768px) { .tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .tab { text-align: left; padding: .875rem 1rem; border-radius: .875rem; border: 1px solid var(--line); background: var(--card); cursor: pointer; }
+  .tab:hover { border-color: #cfd1da; }
+  .tab .n { display: block; font-size: 1.5rem; font-weight: 600; color: var(--ink); line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .tab .l { display: block; margin-top: .125rem; color: var(--muted); font-weight: 500; }
+  .tab .w { display: block; margin-top: .375rem; font-size: .75rem; color: var(--muted); }
+  .tab .w b { color: var(--green); font-weight: 600; }
+  .tab[aria-pressed="true"] { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand); background: linear-gradient(var(--brandlight), var(--card) 70%); }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .625rem; margin-bottom: .75rem; }
+  .search { position: relative; flex: 1 1 16rem; min-width: 0; }
+  .search svg { position: absolute; left: .75rem; top: 50%; width: 1rem; height: 1rem; transform: translateY(-50%); color: var(--muted); }
+  .search input { width: 100%; height: 2.375rem; padding: 0 .75rem 0 2.25rem; border: 1px solid var(--line); border-radius: .625rem; background: var(--card); outline: none; }
+  .search input:focus, .field:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(75,91,234,.15); }
+  .toolbar .spacer { flex: 1 1 auto; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 1rem; overflow: hidden; }
+  .scroll { overflow-x: auto; }
+  table { width: 100%; min-width: 68rem; border-collapse: collapse; }
+  th { position: sticky; top: 0; background: var(--soft); text-align: left; font-size: .75rem; font-weight: 500; color: var(--muted); padding: .625rem .875rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { padding: .75rem .875rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: #FCFCFD; }
+  .date { white-space: nowrap; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .date small { display: block; color: var(--muted); font-size: .75rem; }
+  .strong { color: var(--ink); font-weight: 500; }
+  .muted { color: var(--muted); }
+  .chip { display: inline-flex; align-items: center; gap: .25rem; padding: .125rem .5rem; border-radius: 999px; font-size: .75rem; font-weight: 500; white-space: nowrap; }
+  .chip.signup { background: var(--greenbg); color: var(--green); }
+  .chip.support { background: var(--brandlight); color: var(--brand); }
+  .chip.demo { background: var(--amberbg); color: var(--amber); }
+  .chip.other { background: var(--soft); color: var(--muted); }
+  .warn { display: inline-block; margin-top: .25rem; font-size: .75rem; color: var(--red); }
+  .contact { display: flex; align-items: center; gap: .375rem; }
+  .contact a { color: var(--brand); text-decoration: none; white-space: nowrap; }
+  .contact a:hover { text-decoration: underline; }
+  .copy { flex: none; display: inline-flex; width: 1.5rem; height: 1.5rem; align-items: center; justify-content: center; border: 0; border-radius: .375rem; background: transparent; color: var(--muted); cursor: pointer; }
+  .copy:hover { background: var(--soft); color: var(--ink); }
+  .copy svg { width: .875rem; height: .875rem; }
+  .msg { max-width: 22rem; white-space: pre-wrap; word-break: break-word; }
+  .utm { font-size: .75rem; color: var(--muted); word-break: break-all; max-width: 14rem; }
+  .utm b { color: var(--body); font-weight: 500; }
+
+  .empty { padding: 3.5rem 1rem; text-align: center; color: var(--muted); }
+  .empty b { display: block; color: var(--ink); font-size: 1rem; font-weight: 600; margin-bottom: .25rem; }
+  .foot { margin: .75rem 0 2.5rem; font-size: .75rem; color: var(--muted); }
+
+  .login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .login form { width: 100%; max-width: 24rem; background: var(--card); border: 1px solid var(--line); border-radius: 1.25rem; padding: 1.75rem; box-shadow: 0 1px 2px rgba(9,11,34,.04), 0 .75rem 2.5rem -.75rem rgba(9,11,34,.12); }
+  .login h1 { margin-top: 1.5rem; font-size: 1.375rem; }
+  .login label { display: block; margin: 1.25rem 0 .375rem; font-size: .8125rem; font-weight: 500; color: var(--ink); }
+  .field { width: 100%; height: 2.75rem; padding: 0 .875rem; border: 1px solid var(--line); border-radius: .75rem; outline: none; background: var(--card); }
+  .login .btn { width: 100%; height: 2.75rem; margin-top: 1rem; }
+  .err { margin: .625rem 0 0; color: var(--red); font-size: .8125rem; min-height: 1.15em; }
+
+  .toast { position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%); background: var(--ink); color: #fff; padding: .5rem .875rem; border-radius: .625rem; font-size: .8125rem; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+
+<template id="logo-tpl"><span class="logo"><svg viewBox="0 0 48 48" aria-hidden="true"><defs><clipPath id="lk-adm"><rect x="14" y="24" width="20" height="12"/></clipPath></defs><g transform="rotate(-45 24 24)"><rect x="18" y="17" width="26" height="14" rx="7" fill="none" stroke="#4B5BEA" stroke-width="5"/><rect x="4" y="17" width="26" height="14" rx="7" fill="none" stroke="#FFFFFF" stroke-width="9"/><rect x="4" y="17" width="26" height="14" rx="7" fill="none" stroke="#090B22" stroke-width="5"/><g clip-path="url(#lk-adm)"><rect x="18" y="17" width="26" height="14" rx="7" fill="none" stroke="#FFFFFF" stroke-width="9"/><rect x="18" y="17" width="26" height="14" rx="7" fill="none" stroke="#4B5BEA" stroke-width="5"/></g></g></svg><b>partnerka<span>.io</span></b></span></template>
+
+<!-- вход -->
+<div class="login" id="login-view" hidden>
+  <form id="login-form" novalidate>
+    <div data-logo></div>
+    <h1>Лиды</h1>
+    <p class="sub">Регистрации и обращения с сайта.</p>
+    <label for="pw">Пароль администратора</label>
+    <input class="field" type="password" id="pw" name="password" autocomplete="current-password" required>
+    <p class="err" id="login-err" role="alert"></p>
+    <button class="btn primary" type="submit">Войти</button>
+  </form>
+</div>
+
+<!-- список лидов -->
+<div id="app-view" hidden>
+  <header>
+    <div class="wrap">
+      <div style="display:flex;align-items:center;min-width:0"><a href="/" data-logo></a><span class="crumb">Лиды</span></div>
+      <button class="btn ghost" type="button" id="logout">Выйти</button>
+    </div>
+  </header>
+  <main class="wrap">
+    <h1>Лиды</h1>
+    <p class="sub" id="updated">Загрузка…</p>
+
+    <div class="tabs" role="group" aria-label="Тип лида" id="tabs"></div>
+
+    <div class="toolbar">
+      <label class="search"><span hidden>Поиск</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="search" placeholder="Поиск по почте, контакту, продукту, сообщению, utm" autocomplete="off">
+      </label>
+      <div class="spacer"></div>
+      <button class="btn" type="button" id="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>Обновить</button>
+      <a class="btn primary" id="csv" href="/api/admin/leads.csv" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span id="csv-label">Скачать CSV</span></a>
+    </div>
+
+    <div class="card">
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Дата</th><th>Тип</th><th>Продукт / компания</th><th>Контакт</th><th>E-mail</th><th>Тариф</th><th>Сообщение</th><th>Источник</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" hidden><b>Лидов пока нет</b>Здесь появятся регистрации и обращения с сайта.</div>
+    </div>
+    <p class="foot">Время указано по вашему часовому поясу. В CSV время московское, разделитель «;», файл открывается в Excel и Google Таблицах.</p>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const state = { leads: [], kinds: {}, plans: {}, channels: {}, kind: 'all', q: '' };
+  const TABS = [['all', 'Все лиды'], ['signup', 'Регистрации'], ['support', 'Поддержка'], ['demo', 'Подобрать решение']];
+  const GROUPS = { signup: ['signup', 'contact'], support: ['support'], demo: ['demo'] };
+  const inTab = (l, key) => key === 'all' || (GROUPS[key] || [key]).includes(l.kind);
+
+  document.querySelectorAll('[data-logo]').forEach(el => el.append($('logo-tpl').content.cloneNode(true)));
+
+  // маленький помощник для разметки: значения попадают в DOM только как текст
+  const h = (tag, props = {}, ...kids) => {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(props)) if (v != null) (k in el && k !== 'list') ? (el[k] = v) : el.setAttribute(k, v);
+    for (const k of kids.flat(Infinity)) if (k != null && k !== '') el.append(k instanceof Node ? k : String(k));
+    return el;
+  };
+  const fmt = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const fmtT = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' });
+  const plural = (n, one, few, many) => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many; };
+
+  let toastT;
+  const toast = text => { const t = $('toast'); t.textContent = text; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1600); };
+
+  const api = async (url, body) => {
+    const r = await fetch(url, body ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(body) } : { credentials: 'same-origin' });
+    const data = await r.json().catch(() => ({}));
+    return { status: r.status, ok: r.ok, data };
+  };
+
+  const show = view => { $('login-view').hidden = view !== 'login'; $('app-view').hidden = view !== 'app'; if (view === 'login') setTimeout(() => $('pw').focus(), 0); };
+
+  async function load() {
+    const r = await api('/api/admin/leads');
+    if (r.status === 401) return show('login');
+    if (!r.ok) { $('updated').textContent = 'Не удалось загрузить лиды. Обновите страницу.'; return show('app'); }
+    Object.assign(state, r.data);
+    $('updated').textContent = `Обновлено в ${fmtT.format(new Date())}`;
+    show('app'); render();
+  }
+
+  const filtered = () => {
+    const s = state.q.trim().toLowerCase();
+    return state.leads.filter(l => inTab(l, state.kind)
+      && (!s || [l.email, l.contact, l.product, l.company, l.phone, l.message, ...Object.values(l.utm || {})].some(v => String(v ?? '').toLowerCase().includes(s))));
+  };
+
+  function renderTabs() {
+    const weekAgo = Date.now() - 7 * 864e5;
+    $('tabs').replaceChildren(...TABS.map(([key, label]) => {
+      const list = state.leads.filter(l => inTab(l, key));
+      const week = list.filter(l => new Date(l.created_at).getTime() >= weekAgo).length;
+      const b = h('button', { type: 'button', className: 'tab', 'aria-pressed': String(state.kind === key) },
+        h('span', { className: 'n' }, list.length), h('span', { className: 'l' }, label),
+        h('span', { className: 'w' }, week ? h('b', {}, `+${week}`) : '0', ' за 7 дней'));
+      b.addEventListener('click', () => { state.kind = key; render(); });
+      return b;
+    }));
+  }
+
+  const copyBtn = value => {
+    const b = h('button', { type: 'button', className: 'copy', title: 'Скопировать', 'aria-label': 'Скопировать' });
+    b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+    b.addEventListener('click', async () => { try { await navigator.clipboard.writeText(value); toast('Скопировано'); } catch { toast('Не удалось скопировать'); } });
+    return b;
+  };
+
+  function contactCell(l) {
+    const parts = [];
+    const value = l.contact || l.phone;
+    if (l.contact) {
+      const safe = /^https:\/\/(t\.me|max\.ru|web\.max\.ru)\//i.test(l.contact);
+      const phone = /^\+?[\d\s()-]{10,20}$/.test(l.contact);
+      const link = safe ? h('a', { href: l.contact, target: '_blank', rel: 'noopener noreferrer' }, l.contact.replace(/^https:\/\//, ''))
+        : phone ? h('a', { href: `tel:${l.contact.replace(/[^\d+]/g, '')}` }, l.contact) : h('span', { className: 'strong' }, l.contact);
+      parts.push(h('div', { className: 'contact' }, link, copyBtn(l.contact)));
+      if (l.channel) parts.push(h('div', { className: 'muted' }, state.channels[l.channel] || l.channel));
+    } else if (l.phone) {
+      parts.push(h('div', { className: 'contact' }, h('a', { href: `tel:${l.phone.replace(/[^\d+]/g, '')}` }, l.phone), copyBtn(l.phone)));
+      parts.push(h('div', { className: 'muted' }, 'Телефон'));
+    }
+    return value ? parts : h('span', { className: 'muted' }, '—');
+  }
+
+  function render() {
+    renderTabs();
+    const list = filtered();
+    $('rows').replaceChildren(...list.map(l => {
+      const d = new Date(l.created_at);
+      const kindCls = l.kind === 'contact' ? 'signup' : ['signup', 'support', 'demo'].includes(l.kind) ? l.kind : 'other';
+      const utm = Object.entries(l.utm || {});
+      return h('tr', {},
+        h('td', { className: 'date' }, fmt.format(d), h('small', {}, fmtT.format(d)), l.delivered ? null : h('span', { className: 'warn', title: 'Сообщение не дошло до Mattermost' }, 'не ушло в Mattermost')),
+        h('td', {}, h('span', { className: `chip ${kindCls}` }, state.kinds[l.kind] || l.kind)),
+        h('td', {}, l.product || l.company ? h('span', { className: 'strong' }, l.product || l.company) : h('span', { className: 'muted' }, '—')),
+        h('td', {}, contactCell(l)),
+        h('td', {}, l.email ? h('div', { className: 'contact' }, h('a', { href: `mailto:${l.email}` }, l.email), copyBtn(l.email)) : h('span', { className: 'muted' }, '—')),
+        h('td', {}, l.plan ? (state.plans[l.plan] || l.plan) : h('span', { className: 'muted' }, '—')),
+        h('td', {}, l.message ? h('div', { className: 'msg' }, l.message) : h('span', { className: 'muted' }, '—')),
+        h('td', {}, utm.length ? h('div', { className: 'utm' }, utm.map(([k, v], i) => [i ? ', ' : '', h('b', {}, k), `=${v}`])) : h('span', { className: 'muted' }, 'прямой заход')),
+      );
+    }));
+    const empty = $('empty');
+    empty.hidden = list.length > 0;
+    empty.firstChild.textContent = state.leads.length ? 'Ничего не найдено' : 'Лидов пока нет';
+    empty.lastChild.textContent = state.leads.length ? 'Измените фильтр или строку поиска.' : 'Здесь появятся регистрации и обращения с сайта.';
+
+    const params = new URLSearchParams();
+    if (state.kind !== 'all') params.set('kind', state.kind);
+    if (state.q.trim()) params.set('q', state.q.trim());
+    $('csv').href = '/api/admin/leads.csv' + (params.toString() ? `?${params}` : '');
+    $('csv').setAttribute('aria-disabled', String(!list.length));
+    $('csv-label').textContent = `Скачать CSV · ${list.length} ${plural(list.length, 'лид', 'лида', 'лидов')}`;
+  }
+
+  let searchT;
+  $('search').addEventListener('input', e => { clearTimeout(searchT); searchT = setTimeout(() => { state.q = e.target.value; render(); }, 150); });
+  $('refresh').addEventListener('click', async () => { await load(); toast('Список обновлён'); });
+
+  $('login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('login-err'), btn = e.target.querySelector('button');
+    err.textContent = '';
+    if (!$('pw').value) { err.textContent = 'Введите пароль.'; return; }
+    btn.disabled = true;
+    try {
+      const r = await api('/api/admin/login', { password: $('pw').value });
+      if (!r.ok) { err.textContent = r.data.error || 'Не удалось войти.'; return; }
+      $('pw').value = ''; await load();
+    } catch { err.textContent = 'Нет связи с сервером.'; } finally { btn.disabled = false; }
+  });
+  $('logout').addEventListener('click', async () => { try { await api('/api/admin/logout', {}); } catch {} state.leads = []; show('login'); });
+
+  load().catch(() => show('login'));
+})();
+</script>
+</body>
+</html>
